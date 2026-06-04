@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#E8692A">
+<title>Roamly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --or:#E8692A;--or-l:#FFF0E6;--or-d:#C04E1A;
+  --tl:#2A7E6E;--tl-l:#E6F5F2;
+  --am:#F5A623;--am-l:#FFF8E6;
+  --pk:#D4537E;--pk-l:#FDE8F0;
+  --rd:#A32D2D;--rd-l:#FDEDEC;
+  --tx:#2C2416;--mx:#7A6A58;
+  --bg:#FDF6EE;--sf:#FFF9F3;
+  --ca:#FFFFFF;--bd:rgba(232,105,42,.15);
+}
+html,body{height:100%;background:var(--bg);font-family:'Plus Jakarta Sans',-apple-system,sans-serif;color:var(--tx);overscroll-behavior:none}
+#APP{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:80px}
+
+.SCR{display:none}.SCR.on{display:block}
+.HDR{background:var(--ca);padding:16px 18px 12px;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:50}
+.hT{font-size:20px;font-weight:700;color:var(--or)}
+.hS{font-size:12px;color:var(--mx);margin-top:2px}
+
+.NAV{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--ca);border-top:1px solid var(--bd);display:flex;padding:8px 6px 16px;gap:4px;z-index:100}
+.NI{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:7px 4px;color:var(--mx);font-size:10px;font-weight:600;font-family:inherit;transition:all .2s;border-radius:12px}
+.NI i{font-size:22px;transition:all .2s}
+.NI.on{color:#fff;background:var(--or);transform:translateY(-2px)}
+.NI.on i{font-size:24px}
+
+.SLB{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mx);text-transform:uppercase;padding:14px 16px 6px}
+.CARD{background:var(--ca);border-radius:14px;border:1px solid var(--bd);padding:14px 16px;margin:0 12px 10px}
+
+.CHIP{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:100px;font-size:12px;cursor:pointer;border:1.5px solid var(--bd);background:var(--ca);color:var(--mx);transition:all .15s;font-family:inherit;white-space:nowrap;font-weight:600}
+.CHIP.on{background:var(--or-l);border-color:var(--or);color:var(--or-d)}
+
+.INN{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--bd);background:var(--ca);font-size:14px;color:var(--tx);font-family:inherit;outline:none;transition:border .15s}
+.INN:focus{border-color:var(--or)}
+.SEL{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--bd);background:var(--ca);font-size:14px;color:var(--tx);font-family:inherit;outline:none;appearance:none;-webkit-appearance:none}
+
+.BTNP{width:100%;padding:14px;border-radius:12px;background:var(--or);color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
+.BTNP:hover{background:var(--or-d)}
+.BTNP:active{transform:scale(.98)}
+.BTNP:disabled{opacity:.5;cursor:not-allowed}
+.BTNS{width:100%;padding:11px;border-radius:12px;background:var(--or-l);color:var(--or);font-size:13px;font-weight:700;border:1.5px solid var(--or);cursor:pointer;font-family:inherit}
+
+.SBAR{display:flex;align-items:center;gap:8px;background:var(--ca);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;margin:12px 12px 0}
+.SBAR i{color:var(--mx);font-size:18px}
+.SBAR input{border:none;background:none;outline:none;font-size:14px;color:var(--tx);flex:1;font-family:inherit}
+
+.FROW,.WROW,.IROW{display:flex;gap:7px;padding:10px 12px 4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.FROW::-webkit-scrollbar,.WROW::-webkit-scrollbar,.IROW::-webkit-scrollbar{display:none}
+.IROW{flex-wrap:wrap;overflow:visible}
+
+.PC{background:var(--ca);border-radius:14px;border:1px solid var(--bd);margin:0 12px 12px;cursor:pointer;transition:border .15s;overflow:hidden;display:block}
+.PC:active{border-color:var(--or-d)}
+.PC-IMG{width:100%;height:140px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--or-l),var(--or-m))}
+.PC-IMG img{width:100%;height:100%;object-fit:cover;display:block}
+.PC-IMG.fallback img{display:none}
+.PC-IMG.heritage{background:linear-gradient(135deg,#FFE4D1,#E8692A 80%)}
+.PC-IMG.hills{background:linear-gradient(135deg,#D4E8E0,#2A7E6E 80%)}
+.PC-IMG.beach{background:linear-gradient(135deg,#FFF4D1,#F4A06A 80%)}
+.PC-IMG.wildlife{background:linear-gradient(135deg,#E0F0D4,#3B6D11 80%)}
+.PC-IMG.temple{background:linear-gradient(135deg,#FFE9C7,#F5A623 80%)}
+.PC-IMG.nature{background:linear-gradient(135deg,#C7E8DC,#0F6E56 80%)}
+.PC-IMG-EMOJI{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:54px;text-shadow:0 2px 8px rgba(0,0,0,.15);z-index:2;pointer-events:none}
+.PC-IMG .save-btn{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;z-index:3;color:var(--mx)}
+.PC-IMG .save-btn.on{color:var(--or)}
+.PC-IMG .img-badge{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;z-index:2;backdrop-filter:blur(4px)}
+.PC-CONTENT{padding:12px 14px}
+.PIco{width:46px;height:46px;border-radius:11px;background:var(--or-l);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.HERO-IMG{width:100%;height:220px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--or-l),var(--or-m))}
+.HERO-IMG img{width:100%;height:100%;object-fit:cover;display:block}
+.HERO-IMG.fallback img{display:none}
+.HERO-IMG.heritage{background:linear-gradient(135deg,#FFE4D1,#E8692A 80%)}
+.HERO-IMG.hills{background:linear-gradient(135deg,#D4E8E0,#2A7E6E 80%)}
+.HERO-IMG.beach{background:linear-gradient(135deg,#FFF4D1,#F4A06A 80%)}
+.HERO-IMG.wildlife{background:linear-gradient(135deg,#E0F0D4,#3B6D11 80%)}
+.HERO-IMG.temple{background:linear-gradient(135deg,#FFE9C7,#F5A623 80%)}
+.HERO-IMG.nature{background:linear-gradient(135deg,#C7E8DC,#0F6E56 80%)}
+.HERO-EMOJI{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:90px;text-shadow:0 4px 12px rgba(0,0,0,.2);z-index:2;pointer-events:none}
+.HERO-OVERLAY{position:absolute;bottom:0;left:0;right:0;padding:14px 18px;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);color:#fff;z-index:3}
+.HERO-NAME{font-size:22px;font-weight:700;margin:0}
+.HERO-LOC{font-size:12px;opacity:.95;margin-top:2px}
+.PN{font-size:14px;font-weight:700;color:var(--tx)}
+.PL{font-size:11px;color:var(--mx);margin-top:1px}
+.PTAGS{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.TAG{font-size:10px;padding:2px 7px;border-radius:100px;background:var(--or-l);color:#712B13;font-weight:600}
+.TAG.t{background:var(--tl-l);color:#085041}
+.TAG.a{background:var(--am-l);color:#633806}
+
+.SM2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 12px 10px}
+.SB{background:var(--or-l);border-radius:11px;padding:11px;text-align:center}
+.SBV{font-size:18px;font-weight:700;color:var(--or-d)}
+.SBL{font-size:10px;color:#993C1D;margin-top:2px;font-weight:600}
+
+.FBB{background:var(--tl-l);border-radius:12px;padding:12px 14px;margin:0 12px 10px}
+.BBR{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.BBL{color:#085041}.BBV{color:var(--tl);font-weight:700}
+.BBT{border-top:1px solid rgba(42,126,110,.2);margin-top:6px;padding-top:6px}
+.BBT .BBL{color:var(--tx);font-weight:700}
+.BBT .BBV{color:var(--or);font-weight:700;font-size:14px}
+
+.DDB{background:var(--ca);border-radius:13px;border:1px solid var(--bd);margin:0 12px 8px}
+.DDH{padding:11px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.DDT{font-size:12px;font-weight:700;color:var(--or-d);flex:1;min-width:0}
+.DDC{font-size:12px;color:var(--tl);font-weight:700;flex-shrink:0}
+.DDS{padding:6px 14px 10px}
+.SRW{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--bd)}
+.SRW:last-child{border-bottom:none}
+.STM{font-size:10px;color:var(--mx);width:52px;flex-shrink:0;padding-top:2px;font-weight:700}
+.SNM{font-size:12px;color:var(--tx);font-weight:600}
+.SNT{font-size:10px;color:var(--mx);margin-top:1px}
+
+.ALT{background:var(--am-l);border:1px solid rgba(245,166,35,.3);border-radius:10px;padding:11px 13px;margin:0 12px 10px;display:flex;gap:8px;align-items:flex-start}
+.ALT span{font-size:11px;color:#633806;line-height:1.5}
+
+.FBR{height:8px;border-radius:100px;background:var(--bd);overflow:hidden;margin:0 12px 12px}
+.FBF{height:100%;border-radius:100px;transition:width .3s}
+
+.WC{flex-shrink:0;background:var(--ca);border:1px solid var(--bd);border-radius:10px;padding:7px 11px;text-align:center;min-width:62px}
+.WD{font-size:10px;color:var(--mx);font-weight:600}
+.WI{font-size:17px;margin:2px 0}
+.WT{font-size:11px;font-weight:700;color:var(--tx)}
+
+.TAB{display:flex;border-bottom:1.5px solid var(--bd);margin:0 12px 10px;overflow-x:auto;scrollbar-width:none}
+.TAB::-webkit-scrollbar{display:none}
+.TB{padding:10px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--mx);border-bottom:2px solid transparent;margin-bottom:-1.5px;white-space:nowrap;flex-shrink:0}
+.TB.on{color:var(--or);border-bottom-color:var(--or)}
+
+.TSW{width:40px;height:22px;border-radius:100px;background:var(--bd);position:relative;cursor:pointer;flex-shrink:0;transition:background .15s}
+.TSW.on{background:var(--or)}
+.TSK{width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:2px;left:2px;transition:left .15s}
+.TSW.on .TSK{left:20px}
+
+.PR{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
+.PR:last-child{border-bottom:none}
+.PRL{font-size:12px;color:var(--mx)}
+.PRV{font-size:12px;color:var(--tx);font-weight:700}
+
+.AVA{width:72px;height:72px;border-radius:50%;background:var(--or-l);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;color:var(--or);font-weight:700}
+
+.MBCK{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--or);font-size:14px;font-weight:700;background:none;border:none;font-family:inherit;padding:0}
+
+.INFOTAG{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:100px;background:var(--or-l);color:#712B13;font-size:11px;margin:2px;font-weight:600}
+
+.HRROW{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:.5px solid var(--bd)}
+.HRROW:last-child{border-bottom:none}
+.HRI{width:32px;height:32px;border-radius:9px;background:var(--or-l);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.HRL{font-size:12px;color:var(--tx);font-weight:600;line-height:1.5}
+
+.SCORE{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px}
+.SCORE.r{background:var(--pk-l);color:#72243E}
+.SCORE.g{background:var(--tl-l);color:#085041}
+
+.LROW{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--bd)}
+.LROW:last-child{border-bottom:none}
+.LICO{width:40px;height:40px;border-radius:11px;background:var(--or-l);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.LNMT{font-size:13px;font-weight:700;color:var(--tx)}
+.LSUB{font-size:11px;color:var(--mx);margin-top:1px}
+
+.SAVED{width:30px;height:30px;border-radius:9px;background:var(--or-l);display:flex;align-items:center;justify-content:center;margin-left:auto;cursor:pointer;flex-shrink:0;font-size:14px;color:var(--mx)}
+.SAVED.on{color:var(--or)}
+
+.TYPE-DESC{background:var(--or-l);border-radius:10px;padding:10px 13px;margin:6px 12px 10px;font-size:11px;color:#712B13;line-height:1.5;font-weight:600}
+
+.HOTEL{background:var(--ca);border-radius:12px;border:1px solid var(--bd);padding:12px 14px;margin:0 12px 8px;position:relative}
+.SPON{position:absolute;top:9px;right:9px;font-size:9px;font-weight:800;padding:3px 8px;border-radius:100px;background:var(--am);color:#fff;letter-spacing:.04em}
+.HNM{font-size:13px;font-weight:700;color:var(--tx)}
+.HMETA{display:flex;gap:10px;margin-top:5px;font-size:11px;color:var(--mx);align-items:center;flex-wrap:wrap}
+.HMETA b{color:var(--or);font-weight:700;font-size:13px}
+.HAMEN{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.HAM{font-size:10px;color:var(--mx);background:var(--bg);padding:2px 8px;border-radius:6px;font-weight:600}
+.RATING{display:inline-flex;align-items:center;gap:3px;background:var(--tl-l);padding:2px 8px;border-radius:6px;font-size:11px;color:#085041;font-weight:700}
+
+.MEAL{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:.5px solid var(--bd)}
+.MEAL:last-child{border-bottom:none}
+.MEALI{width:36px;height:36px;border-radius:10px;background:var(--am-l);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.MN{font-size:12px;font-weight:700;color:var(--tx)}
+.MS{font-size:11px;color:var(--mx)}
+.MP{font-size:11px;color:var(--or);font-weight:700;margin-left:auto;flex-shrink:0}
+
+.ROL{padding:12px 16px;display:flex;align-items:center;gap:6px;background:var(--ca);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:50}
+.PILL-NEW{display:inline-block;background:var(--or-l);color:var(--or-d);padding:2px 8px;border-radius:100px;font-size:10px;font-weight:800;margin-left:6px;letter-spacing:.04em}
+
+#AUTH-SCR{display:flex;flex-direction:column;min-height:100vh;padding:30px 24px;background:linear-gradient(180deg,var(--bg) 0%,var(--sf) 100%)}
+#AUTH-SCR.hide{display:none}
+.AUTH-LOGO{text-align:center;margin:40px 0 24px}
+.AUTH-LOGO .icn{font-size:48px;margin-bottom:8px}
+.AUTH-LOGO h1{font-size:26px;font-weight:700;color:var(--or);margin-bottom:6px}
+.AUTH-LOGO p{font-size:13px;color:var(--mx)}
+.AUTH-CARD{background:var(--ca);border:1px solid var(--bd);border-radius:18px;padding:24px;margin-bottom:16px;box-shadow:0 4px 20px rgba(232,105,42,.06)}
+.AUTH-TAB{display:flex;gap:0;border-bottom:1.5px solid var(--bd);margin-bottom:20px}
+.ATB{flex:1;padding:11px;font-size:13px;font-weight:700;cursor:pointer;color:var(--mx);border-bottom:2px solid transparent;margin-bottom:-1.5px;text-align:center;transition:all .15s;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none}
+.ATB.on{color:var(--or);border-bottom-color:var(--or)}
+.AUTH-FORM{display:flex;flex-direction:column;gap:12px}
+.AUTH-LBL{font-size:12px;color:var(--mx);font-weight:600;margin-bottom:5px;display:block}
+.AUTH-MSG{font-size:12px;color:var(--rd);padding:8px 12px;border-radius:8px;background:var(--rd-l);margin-top:6px;display:none}
+.AUTH-MSG.show{display:block}
+.AUTH-MSG.success{color:#085041;background:var(--tl-l)}
+.GBTN{width:100%;padding:13px;border-radius:12px;background:#fff;color:#333;font-size:14px;font-weight:700;border:1.5px solid var(--bd);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px}
+.GBTN:hover{background:var(--sf)}
+.GBTN .gico{width:18px;height:18px;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%234285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="%2334A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="%23FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="%23EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>') no-repeat center/contain}
+.AUTH-LINK{font-size:12px;color:var(--mx);text-align:center;margin-top:10px}
+.AUTH-LINK a{color:var(--or);font-weight:700;cursor:pointer;text-decoration:none}
+.AUTH-DIVIDER{display:flex;align-items:center;gap:10px;margin:14px 0 4px;color:var(--mx);font-size:11px;font-weight:600}
+.AUTH-DIVIDER::before,.AUTH-DIVIDER::after{content:'';flex:1;height:1px;background:var(--bd)}
+.AUTH-MODE-BADGE{position:fixed;top:10px;right:10px;background:var(--am);color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:100px;z-index:200;letter-spacing:.04em}
+.AUTH-MODE-BADGE.firebase{background:var(--tl)}
+
+.LOADER{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#APP-LOADER{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:14px}
+#APP-LOADER.hide{display:none}
+#APP-LOADER .ldr{width:36px;height:36px;border:3px solid var(--bd);border-top-color:var(--or);border-radius:50%;animation:spin .8s linear infinite}
+#APP-LOADER p{font-size:13px;color:var(--mx);font-weight:600}
+
+@media(min-width:481px){#APP{box-shadow:0 0 30px rgba(0,0,0,.06)}}
+</style>
+</head>
+<body>
+
+<div id="APP-LOADER">
+  <div class="ldr"></div>
+  <p>Loading Karnataka Trip Planner...</p>
+</div>
+
+<div id="AUTH-SCR" class="hide">
+  <div id="auth-mode-badge" class="AUTH-MODE-BADGE">DEMO MODE</div>
+  <div class="AUTH-LOGO">
+    <div class="icn">🏛️</div>
+    <h1>Karnataka Trip Planner</h1>
+    <p>Plan unforgettable journeys across Karnataka</p>
+  </div>
+  <div class="AUTH-CARD">
+    <div class="AUTH-TAB">
+      <button class="ATB on" id="tab-login" onclick="setAuthTab('login')">Log in</button>
+      <button class="ATB" id="tab-signup" onclick="setAuthTab('signup')">Sign up</button>
+    </div>
+
+    <form class="AUTH-FORM" id="login-form" onsubmit="handleLogin(event)">
+      <div>
+        <label class="AUTH-LBL">Email</label>
+        <input type="email" class="INN" id="login-email" placeholder="you@example.com" required>
+      </div>
+      <div>
+        <label class="AUTH-LBL">Password</label>
+        <input type="password" class="INN" id="login-password" placeholder="Your password" required minlength="6">
+      </div>
+      <button type="submit" class="BTNP" id="login-btn">Log in</button>
+      <div class="AUTH-MSG" id="login-msg"></div>
+      <div class="AUTH-DIVIDER">or</div>
+      <button type="button" class="GBTN" onclick="signInWithGoogle()"><span class="gico"></span> Continue with Google</button>
+    </form>
+
+    <form class="AUTH-FORM" id="signup-form" style="display:none" onsubmit="handleSignup(event)">
+      <div>
+        <label class="AUTH-LBL">Full name</label>
+        <input type="text" class="INN" id="signup-name" placeholder="Your name" required>
+      </div>
+      <div>
+        <label class="AUTH-LBL">Email</label>
+        <input type="email" class="INN" id="signup-email" placeholder="you@example.com" required>
+      </div>
+      <div>
+        <label class="AUTH-LBL">Password</label>
+        <input type="password" class="INN" id="signup-password" placeholder="Min 6 characters" required minlength="6">
+      </div>
+      <button type="submit" class="BTNP" id="signup-btn">Create account</button>
+      <div class="AUTH-MSG" id="signup-msg"></div>
+      <div class="AUTH-DIVIDER">or</div>
+      <button type="button" class="GBTN" onclick="signInWithGoogle()"><span class="gico"></span> Sign up with Google</button>
+    </form>
+  </div>
+  <div class="AUTH-LINK" id="auth-mode-hint">⚠️ Demo mode — add Firebase config to enable real accounts. <a onclick="alert('Open firebase-setup.md for instructions')">Setup guide</a></div>
+</div>
+
+<div id="APP" style="display:none">
+
+  <div id="S-explore" class="SCR on">
+    <div class="HDR">
+      <div class="hT">Explore Karnataka</div>
+      <div class="hS">25 handpicked destinations</div>
+    </div>
+    <div class="SBAR">
+      <i>🔍</i>
+      <input type="text" placeholder="Search places, cities, tags..." id="srch" oninput="ST.search=this.value;renderPlaces()">
+    </div>
+    <div class="FROW">
+      <div class="CHIP on" onclick="setFilter('all',this)">All</div>
+      <div class="CHIP" onclick="setFilter('nature',this)">Nature</div>
+      <div class="CHIP" onclick="setFilter('heritage',this)">Heritage</div>
+      <div class="CHIP" onclick="setFilter('temple',this)">Temples</div>
+      <div class="CHIP" onclick="setFilter('beach',this)">Beaches</div>
+      <div class="CHIP" onclick="setFilter('wildlife',this)">Wildlife</div>
+      <div class="CHIP" onclick="setFilter('hills',this)">Hills</div>
+    </div>
+    <div id="plist"></div>
+  </div>
+
+  <div id="S-detail" class="SCR">
+    <div class="ROL"><button class="MBCK" onclick="goBack()">← Back</button></div>
+    <div id="dbody"></div>
+  </div>
+
+  <div id="S-plan" class="SCR">
+    <div class="HDR">
+      <div class="hT">Plan Your Trip</div>
+      <div class="hS">Customize for your travel style</div>
+    </div>
+    <div class="SLB">Who's traveling?</div>
+    <div class="IROW">
+      <div class="CHIP on" onclick="setType('couple',this)">💑 Couple</div>
+      <div class="CHIP" onclick="setType('family',this)">👨‍👩‍👧‍👦 Family</div>
+      <div class="CHIP" onclick="setType('elders',this)">👴 With elders</div>
+      <div class="CHIP" onclick="setType('kids',this)">👶 With kids</div>
+      <div class="CHIP" onclick="setType('youth',this)">🎒 Youth</div>
+      <div class="CHIP" onclick="setType('solo',this)">🧍 Solo</div>
+    </div>
+    <div class="TYPE-DESC" id="typeDesc">💑 Couple mode: prioritizes romantic spots, sunset/sunrise viewpoints, scenic cafés & less crowded places.</div>
+    <div class="SLB">Travel mode</div>
+    <div class="IROW">
+      <div class="CHIP on" onclick="setMode('car',this)">🚗 Car</div>
+      <div class="CHIP" onclick="setMode('bus',this)">🚌 Bus</div>
+      <div class="CHIP" onclick="setMode('train',this)">🚆 Train</div>
+      <div class="CHIP" onclick="setMode('bike',this)">🏍️ Bike</div>
+      <div class="CHIP" onclick="setMode('mixed',this)">🚐 Mixed</div>
+    </div>
+    <div class="SLB">Trip details</div>
+    <div class="CARD" style="display:flex;flex-direction:column;gap:10px">
+      <div><label class="AUTH-LBL">Total budget (₹)</label><input type="number" class="INN" id="p-budget" value="15000" min="1000"></div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+        <div><label class="AUTH-LBL">Days</label><input type="number" class="INN" id="p-days" value="3" min="1" max="10" oninput="updateEndDate()"></div>
+        <div><label class="AUTH-LBL">People</label><input type="number" class="INN" id="p-people" value="2" min="1"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+        <div><label class="AUTH-LBL">Start date</label><input type="date" class="INN" id="p-start-date" oninput="updateEndDate()"></div>
+        <div><label class="AUTH-LBL">End date</label><input type="date" class="INN" id="p-end-date" readonly style="background:var(--bg);color:var(--mx);cursor:default"></div>
+      </div>
+      <div><label class="AUTH-LBL">Starting from</label>
+      <select class="SEL" id="p-city"><option>Bengaluru</option><option>Mysuru</option><option>Mangaluru</option><option>Hubli</option><option>Belagavi</option></select></div>
+    </div>
+    <div class="SLB">Interests</div>
+    <div class="IROW">
+      <div class="CHIP" onclick="toggleInterest('temples',this)">🏛️ Temples</div>
+      <div class="CHIP" onclick="toggleInterest('nature',this)">🌿 Nature</div>
+      <div class="CHIP" onclick="toggleInterest('beaches',this)">🏖️ Beaches</div>
+      <div class="CHIP" onclick="toggleInterest('heritage',this)">🏰 Heritage</div>
+      <div class="CHIP" onclick="toggleInterest('food',this)">🍽️ Food</div>
+      <div class="CHIP" onclick="toggleInterest('adventure',this)">🧗 Adventure</div>
+      <div class="CHIP" onclick="toggleInterest('wildlife',this)">🐘 Wildlife</div>
+      <div class="CHIP" onclick="toggleInterest('scenic',this)">🌅 Scenic</div>
+    </div>
+    <div class="SLB">Pace</div>
+    <div class="IROW">
+      <div class="CHIP on" onclick="setPace('relaxed',this)">🌿 Relaxed</div>
+      <div class="CHIP" onclick="setPace('moderate',this)">⚡ Moderate</div>
+      <div class="CHIP" onclick="setPace('packed',this)">🔥 Packed</div>
+    </div>
+    <div style="padding:10px 12px 4px"><button class="BTNP" onclick="generatePlan()">Generate itinerary →</button></div>
+  </div>
+
+  <div id="S-itinerary" class="SCR">
+    <div class="HDR"><div class="hT">Your Itinerary</div><div class="hS" id="i-sub">Generate a plan first</div></div>
+    <div id="i-empty" style="text-align:center;padding:3rem 1rem;color:var(--mx)">
+      <div style="font-size:42px;opacity:.3;margin-bottom:12px">🗺️</div>
+      <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:6px">No itinerary yet</div>
+      <div style="font-size:12px">Go to Plan tab and hit generate!</div>
+    </div>
+    <div id="i-content" style="display:none">
+      <div class="TAB">
+        <div class="TB on" onclick="setITab('overview',this)">Overview</div>
+        <div class="TB" onclick="setITab('days',this)">Day plan</div>
+        <div class="TB" onclick="setITab('budget',this)">Budget</div>
+        <div class="TB" onclick="setITab('customize',this)">Customize</div>
+      </div>
+      <div id="it-content"></div>
+    </div>
+  </div>
+
+  <div id="S-profile" class="SCR">
+    <div class="HDR"><div class="hT">My Profile</div><div class="hS">Your travel identity</div></div>
+    <div style="padding:20px 12px 0;text-align:center">
+      <div class="AVA" id="user-avatar">👤</div>
+      <div style="font-size:17px;font-weight:700" id="user-name">User</div>
+      <div style="font-size:12px;color:var(--mx);margin-top:3px" id="user-email">email@example.com</div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:16px">
+        <div style="text-align:center"><div style="font-size:19px;font-weight:700;color:var(--or)" id="pr-trips">0</div><div style="font-size:10px;color:var(--mx);font-weight:600">Trips</div></div>
+        <div style="width:1px;background:var(--bd)"></div>
+        <div style="text-align:center"><div style="font-size:19px;font-weight:700;color:var(--or)" id="pr-saved-c">0</div><div style="font-size:10px;color:var(--mx);font-weight:600">Saved</div></div>
+        <div style="width:1px;background:var(--bd)"></div>
+        <div style="text-align:center"><div style="font-size:19px;font-weight:700;color:var(--or)" id="pr-days">0</div><div style="font-size:10px;color:var(--mx);font-weight:600">Days</div></div>
+      </div>
+    </div>
+    <div class="SLB">Last trip preferences</div>
+    <div class="CARD" id="pr-prefs"><div style="font-size:12px;color:var(--mx)">No trips generated yet</div></div>
+    <div class="SLB">Saved places</div>
+    <div class="CARD" id="pr-saved"><div style="font-size:12px;color:var(--mx)">Tap the bookmark on any place to save it</div></div>
+    <div class="SLB">Recently viewed</div>
+    <div class="CARD" id="pr-recent"><div style="font-size:12px;color:var(--mx)">No destinations viewed yet</div></div>
+    <div class="SLB">Notifications</div>
+    <div class="CARD">
+      <div class="PR"><span class="PRL">🌧️ Weather alerts</span><div class="TSW on" onclick="this.classList.toggle('on')"><div class="TSK"></div></div></div>
+      <div class="PR"><span class="PRL">💰 Budget reminders</span><div class="TSW on" onclick="this.classList.toggle('on')"><div class="TSK"></div></div></div>
+      <div class="PR"><span class="PRL">🏥 Medical facility alerts</span><div class="TSW" onclick="this.classList.toggle('on')"><div class="TSK"></div></div></div>
+      <div class="PR"><span class="PRL">🔔 Trip reminders</span><div class="TSW on" onclick="this.classList.toggle('on')"><div class="TSK"></div></div></div>
+    </div>
+    <div class="SLB">App settings</div>
+    <div class="CARD">
+      <div class="PR"><span class="PRL">Language</span><span class="PRV">English</span></div>
+      <div class="PR"><span class="PRL">Currency</span><span class="PRV">INR (₹)</span></div>
+      <div class="PR"><span class="PRL">Distance unit</span><span class="PRV">Kilometres</span></div>
+      <div class="PR"><span class="PRL">App version</span><span class="PRV">1.0.0</span></div>
+    </div>
+    <div style="padding:10px 12px 20px">
+      <button class="BTNP" style="background:var(--rd)" onclick="handleLogout()">Log out</button>
+    </div>
+  </div>
+
+  <nav class="NAV">
+    <button class="NI on" id="nav-explore" onclick="nav('explore')"><i>🧭</i><span>Explore</span></button>
+    <button class="NI" id="nav-plan" onclick="nav('plan')"><i>📍</i><span>Plan</span></button>
+    <button class="NI" id="nav-itinerary" onclick="nav('itinerary')"><i>📅</i><span>Itinerary</span></button>
+    <button class="NI" id="nav-profile" onclick="nav('profile')"><i>👤</i><span>Profile</span></button>
+  </nav>
+</div>
+
+<script type="module">
+// ============================================================
+// FIREBASE CONFIG — REPLACE THIS WITH YOUR OWN CONFIG
+// Get it from: Firebase Console → Project Settings → General → Your apps
+// If you leave it as below, the app runs in DEMO MODE with localStorage
+// ============================================================
+const FIREBASE_CONFIG = {
+  apiKey: "YOUR_API_KEY_HERE",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const USE_FIREBASE = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY_HERE";
+
+let auth, db, GoogleAuthProvider, signInEmail, createUser, signOutFn, signInGoogleFn, doc, setDoc, getDoc, onAuthChange;
+
+if (USE_FIREBASE) {
+  try {
+    const appModule = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+    const authModule = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
+    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+    const app = appModule.initializeApp(FIREBASE_CONFIG);
+    auth = authModule.getAuth(app);
+    db = firestoreModule.getFirestore(app);
+    GoogleAuthProvider = authModule.GoogleAuthProvider;
+    signInEmail = authModule.signInWithEmailAndPassword;
+    createUser = authModule.createUserWithEmailAndPassword;
+    signOutFn = authModule.signOut;
+    signInGoogleFn = authModule.signInWithPopup;
+    doc = firestoreModule.doc;
+    setDoc = firestoreModule.setDoc;
+    getDoc = firestoreModule.getDoc;
+    onAuthChange = authModule.onAuthStateChanged;
+    document.getElementById('auth-mode-badge').textContent = 'FIREBASE';
+    document.getElementById('auth-mode-badge').classList.add('firebase');
+    document.getElementById('auth-mode-hint').innerHTML = '✅ Connected to Firebase';
+  } catch(e) {
+    console.error('Firebase init failed:', e);
+    window.FIREBASE_FAILED = true;
+  }
+}
+
+window.FB = USE_FIREBASE && !window.FIREBASE_FAILED;
+window.fbAuth = { auth, db, GoogleAuthProvider, signInEmail, createUser, signOutFn, signInGoogleFn, doc, setDoc, getDoc, onAuthChange };
+
+// Once auth setup done, init app
+window.initAuth();
+</script>
+
+<script>
+// ============================================================
+// DESTINATION IMAGES — Replace any URL below with your own
+// You can search unsplash.com or pexels.com for free Karnataka images
+// Just copy the image URL and paste here. Format: id: "https://..."
+// If an image fails to load, a beautiful gradient card with the
+// destination emoji shows automatically — so missing URLs are fine.
+// ============================================================
+const IMAGES={
+1:"https://images.unsplash.com/photo-1651569213711-b29d1fc3f995?w=600&q=80&auto=format&fit=crop",
+3:"https://images.unsplash.com/photo-1539413415627-9bd6cbc96518?w=600&q=80&auto=format&fit=crop"
+};
+
+function getImage(id){
+  return IMAGES[id]||`https://picsum.photos/seed/karnataka${id}/600/400`;
+}
+
+const PL=[
+{id:1,n:"Hampi",c:"Ballari",e:"🏛️",t:"heritage",tg:["UNESCO","Heritage","Ruins"],ds:"Ancient Vijayanagara empire capital with stunning boulder landscapes.",co:1200,w:3,ro:7,k:7,el:4,fa:8,du:6,bt:"Oct–Feb",tp:["Visit Vittala Temple early to avoid crowds","Hire a local guide for rich history","Rent a bicycle to cover the vast site"],fd:["Bisi Bele Bath","Jolada Roti","Obbattu"],hl:["Virupaksha Temple","Vittala Temple","Stone Chariot","Elephant Stables","Lotus Mahal"],md:"District Hospital Hospet (13km)",tr:"6 hrs from Bengaluru via NH50"},
+{id:2,n:"Coorg",c:"Kodagu",e:"🌿",t:"hills",tg:["Coffee","Hills","Nature"],ds:"Scotland of India – misty coffee estates and Kodava culture.",co:2500,w:3,ro:9,k:6,el:5,fa:7,du:4,bt:"Oct–Mar",tp:["Book a coffee estate homestay","Carry warm clothes for evenings","Avoid monsoon for trekking"],fd:["Pandi Curry","Kadambuttu","Akki Roti"],hl:["Abbey Falls","Raja's Seat","Dubare Elephant Camp","Namdroling Monastery"],md:"Cauvery Hospital Madikeri (8km)",tr:"5 hrs from Bengaluru via Mysuru"},
+{id:3,n:"Mysuru",c:"Mysuru",e:"🏰",t:"heritage",tg:["Palace","Heritage","Culture"],ds:"City of palaces – royal heritage, silk, and Dasara grandeur.",co:1500,w:2,ro:7,k:8,el:9,fa:9,du:3,bt:"Year-round",tp:["Palace lit up every Sunday evening","Visit Devaraja Market for silk","Book Brindavan Gardens in advance"],fd:["Mysore Pak","Idli Vada Sambar","Masala Dosa"],hl:["Mysore Palace","Chamundi Hills","Brindavan Gardens","St. Philomena's Church","Mysore Zoo"],md:"JSS Hospital (3km)",tr:"3 hrs from Bengaluru via Expressway"},
+{id:4,n:"Gokarna",c:"Uttara Kannada",e:"🏖️",t:"beach",tg:["Beach","Temple","Sunset"],ds:"Sacred beach town with pristine coastline and Om Beach sunsets.",co:1800,w:3,ro:9,k:7,el:4,fa:7,du:3,bt:"Oct–Mar",tp:["Kudle Beach is quieter than Om","Trek to Paradise Beach at low tide","Carry cash – ATMs are limited"],fd:["Seafood Thali","Neer Dosa","Coconut Prawn Curry"],hl:["Om Beach","Kudle Beach","Mahabaleshwara Temple","Paradise Beach","Sunset viewpoint"],md:"Gokarna PHC",tr:"8 hrs from Bengaluru via NH66"},
+{id:5,n:"Bandipur",c:"Chamarajanagar",e:"🐘",t:"wildlife",tg:["Safari","Wildlife","Tiger Reserve"],ds:"Top tiger reserve and elephant corridor in the Nilgiri Biosphere.",co:2000,w:1,ro:6,k:9,el:7,fa:10,du:2,bt:"Mar–May, Oct–Nov",tp:["Book safari slots online in advance","Morning safaris (6–9 AM) are best","Stay within resort – no night movement"],fd:["Karnataka Thali","Ragi Mudde","Sambar Rice"],hl:["Jeep safari","Elephant herds","Bird watching","Tiger Reserve"],md:"NIMHANS Mysuru (80km)",tr:"4 hrs from Bengaluru"},
+{id:6,n:"Chikmagalur",c:"Chikmagalur",e:"⛰️",t:"hills",tg:["Coffee","Trekking","Hills"],ds:"First coffee-grown land with Mullayanagiri, Karnataka's highest peak.",co:2200,w:4,ro:8,k:5,el:4,fa:6,du:3,bt:"Sep–Mar",tp:["Mullayanagiri trek best at sunrise","Coffee estate tours included with stay","Baba Budangiri has restricted night access"],fd:["Filter Coffee","Kesari Bath","Akki Roti"],hl:["Mullayanagiri peak","Baba Budangiri","Coffee estate trek","Hebbe Falls"],md:"Chikmagalur District Hospital",tr:"5 hrs from Bengaluru"},
+{id:7,n:"Belur & Halebidu",c:"Hassan",e:"🗿",t:"temple",tg:["Hoysala","Temple","Architecture"],ds:"12th century Hoysala temples – India's finest stone sculptures.",co:800,w:2,ro:6,k:6,el:8,fa:7,du:3,bt:"Oct–Feb",tp:["Hire ASI guide for ₹200","Photography allowed without flash","Combine both in one day"],fd:["Obbattu","Bisi Bele Bath","Mysore Pak"],hl:["Chennakeshava Temple","Hoysaleswara Temple","Kedareshwara Temple","Sculpture museum"],md:"Hassan Government Hospital",tr:"4 hrs from Bengaluru"},
+{id:8,n:"Murudeshwar",c:"Uttara Kannada",e:"🙏",t:"temple",tg:["Temple","Sea","Shiva Statue"],ds:"Towering 20-storey Shiva statue by the Arabian Sea.",co:1400,w:2,ro:7,k:7,el:6,fa:8,du:2,bt:"Oct–Mar",tp:["Take Raja Gopura lift for sea views","Scuba diving at Netrani Island","Temple darshan is free"],fd:["Mangalorean Fish Curry","Neer Dosa","Kundapur Chicken"],hl:["Murudeshwara Temple","20-storey Shiva statue","Netrani Island diving","Sea beach"],md:"Bhatkal CHC (18km)",tr:"7 hrs from Bengaluru"},
+{id:9,n:"Jog Falls",c:"Shivamogga",e:"💧",t:"nature",tg:["Waterfall","Nature","Monsoon"],ds:"India's second highest plunge waterfall – best in monsoon.",co:900,w:3,ro:8,k:8,el:5,fa:9,du:2,bt:"Jul–Oct",tp:["Jul–Sep for max water flow","Descent to base is steep – wear sturdy shoes","Free government viewpoint"],fd:["Ragi Mudde","Akki Roti","Jolada Roti"],hl:["Raja Falls","Rani Falls","Rover Falls","Roarer Falls"],md:"Sagar Hospital (30km)",tr:"5 hrs from Bengaluru"},
+{id:10,n:"Dandeli",c:"Uttara Kannada",e:"🛶",t:"wildlife",tg:["Rafting","Wildlife","Adventure"],ds:"Adventure capital with river rafting and Kali Tiger Reserve.",co:2500,w:3,ro:6,k:7,el:3,fa:7,du:2,bt:"Oct–May",tp:["Book rafting in advance","Carry dry bags","Night jungle drives with permits"],fd:["Bamboo Chicken","Malvani Crab","Forest Thali"],hl:["White water rafting","Kuleni Forest","Bird watching","Kayaking"],md:"Dandeli Government Hospital",tr:"9 hrs from Bengaluru"},
+{id:11,n:"Badami",c:"Bagalkote",e:"🏔️",t:"heritage",tg:["Cave Temples","Chalukya","Heritage"],ds:"6th century Chalukyan cave temples in red sandstone cliffs.",co:1000,w:3,ro:6,k:6,el:5,fa:7,du:3,bt:"Oct–Mar",tp:["All 4 caves in 3–4 hours","Wear covered footwear","Cave 3 has best carvings"],fd:["Jowar Roti","North Karnataka Thali","Shenga Holige"],hl:["Cave Temple 1-4","Bhutanatha Temple","Agastya Lake","Archaeological Museum"],md:"Badami Government Hospital",tr:"6 hrs from Bengaluru"},
+{id:12,n:"Kabini",c:"Mysuru",e:"🌊",t:"wildlife",tg:["Safari","Backwaters","Wildlife"],ds:"Pristine backwaters and finest wildlife spot in Nagarhole.",co:3500,w:1,ro:9,k:8,el:7,fa:9,du:2,bt:"Jun–Oct",tp:["Boat safari is more scenic than jeep","Book Jungle Lodges months ahead","Elephant herds in summer"],fd:["Forest Thali","Ragi Mudde","Bamboo Biryani"],hl:["Backwater boat safari","Kabini Dam","Elephant herds","Tiger spotting"],md:"H.D. Kote Hospital (18km)",tr:"4.5 hrs from Bengaluru"},
+{id:13,n:"Udupi",c:"Udupi",e:"🍜",t:"temple",tg:["Temple","Food","Culture"],ds:"Birthplace of Udupi cuisine, home of the Krishna Temple.",co:1200,w:2,ro:5,k:8,el:9,fa:9,du:2,bt:"Oct–Mar",tp:["Temple prasad is free & delicious","Malpe Beach is 5km away","Paryaya festival is spectacular"],fd:["Udupi Thali","Neer Dosa","Kane Fish Fry","Kodbale"],hl:["Sri Krishna Temple","Malpe Beach","St. Mary's Islands","Anantheshwara Temple"],md:"KMC Manipal (8km)",tr:"5.5 hrs from Bengaluru"},
+{id:14,n:"Sakleshpur",c:"Hassan",e:"🚂",t:"hills",tg:["Coffee","Railway","Trekking"],ds:"Lush coffee trail and heritage railway trek through Ghats.",co:1800,w:4,ro:8,k:5,el:4,fa:6,du:2,bt:"Sep–Feb",tp:["Railway trek needs Forest permit","Carry rain gear","Farm-to-cup coffee stays"],fd:["Filter Coffee","Akki Roti","Pandi Curry"],hl:["Heritage railway trek","Coffee estate tours","Manjarabad Fort","Bisle Ghat"],md:"Sakleshpur Government Hospital",tr:"4.5 hrs from Bengaluru"},
+{id:15,n:"Nandi Hills",c:"Chikkaballapura",e:"🌄",t:"hills",tg:["Sunrise","Hills","Cycling"],ds:"Tipu Sultan's summer retreat – legendary sunrise and paragliding.",co:900,w:2,ro:8,k:7,el:6,fa:8,du:1,bt:"Sep–Feb",tp:["Arrive before 5:30 AM for sunrise","Paragliding Oct–Feb with booking","Bhoga Nandeeshwara at base is overlooked"],fd:["Corn on the cob","Kaveri Restaurant breakfast","Filter coffee"],hl:["Sunrise viewpoint","Tipu's Drop","Bhoga Nandeeshwara Temple","Paragliding zone"],md:"Chikkaballapura Hospital (20km)",tr:"1.5 hrs from Bengaluru"},
+{id:16,n:"Nagarhole",c:"Mysuru",e:"🐯",t:"wildlife",tg:["Tiger Reserve","Safari","Nature"],ds:"Rajiv Gandhi National Park – tigers and Asian elephants corridor.",co:2000,w:1,ro:7,k:9,el:7,fa:10,du:2,bt:"Oct–May",tp:["Morning safari slots are gold","Kabini river edge is wildlife hotspot","Book permit on KFD website"],fd:["Karnataka Thali","Ragi Mudde","Local Honey"],hl:["Jeep safari","River edge wildlife","Nagarhole river cruise","Tribal village walk"],md:"H.D. Kote Hospital (25km)",tr:"4.5 hrs from Bengaluru"},
+{id:17,n:"St. Mary's Islands",c:"Udupi",e:"🏝️",t:"beach",tg:["Island","Beach","Basalt Rocks"],ds:"Unique hexagonal basalt rock formations on a pristine island.",co:1200,w:2,ro:9,k:8,el:5,fa:8,du:1,bt:"Oct–Apr",tp:["Boat from Malpe Beach (first 9 AM)","Island closes at 5 PM","No food stalls – carry snacks"],fd:["Coconut Water","Malpe Seafood","Sol Kadhi"],hl:["Basalt formations","Coconut Island","Snorkeling","Lighthouse view"],md:"KMC Manipal (10km)",tr:"5.5 hrs from Bengaluru"},
+{id:18,n:"Shravanabelagola",c:"Hassan",e:"🗿",t:"temple",tg:["Jain","Gommateshwara","Pilgrimage"],ds:"Tallest monolithic statue – 58ft Gommateshwara from single rock.",co:600,w:3,ro:4,k:5,el:4,fa:6,du:1,bt:"Oct–Mar",tp:["700 steps – sturdy footwear essential","Visit early before heat","Mahamastakabhisheka every 12 years"],fd:["Dharwad Pedha","Mysore Pak","North Karnataka Thali"],hl:["Gommateshwara statue","Chandragiri Hill","Jain pilgrimage complex","Top view"],md:"Hassan Hospital (50km)",tr:"3 hrs from Bengaluru"},
+{id:19,n:"Chitradurga Fort",c:"Chitradurga",e:"🏯",t:"heritage",tg:["Fort","History","Architecture"],ds:"Impregnable fortress with 7 concentric walls and 19 temples.",co:700,w:3,ro:5,k:7,el:5,fa:8,du:2,bt:"Oct–Feb",tp:["Entry ₹25 for Indians","Wear comfortable shoes","Obavva's passage is most popular"],fd:["Jowar Roti","Ragi Mudde","Chitradurga Mixture"],hl:["Fort ramparts","Hidimbeshwara Temple","Obavva's passage","Hill views"],md:"Chitradurga Hospital (3km)",tr:"3.5 hrs from Bengaluru"},
+{id:20,n:"Agumbe",c:"Shivamogga",e:"🌧️",t:"nature",tg:["Rainforest","Sunset","Biodiversity"],ds:"Cherrapunji of the South – rainforest and king cobra territory.",co:1000,w:3,ro:8,k:6,el:4,fa:6,du:2,bt:"Jun–Oct, Dec–Jan",tp:["Best in monsoon – carry waterproofs","ARRS guided tours","Night walks with booking"],fd:["Malnad Cuisine","Neer Dosa","Jackfruit Dishes"],hl:["Sunset Point","Barkana Falls","Rainforest trails","Onake Abbi Falls"],md:"Thirthahalli Hospital (35km)",tr:"5 hrs from Bengaluru"},
+{id:21,n:"Pattadakal",c:"Bagalkote",e:"🏛️",t:"heritage",tg:["UNESCO","Chalukya","Temples"],ds:"UNESCO site with 8th century Chalukyan temples.",co:800,w:2,ro:5,k:6,el:7,fa:7,du:2,bt:"Oct–Feb",tp:["Combine with Badami & Aihole","ASI guide for ₹250","Entry ₹40 Indians"],fd:["North Karnataka Thali","Shenga Holige","Jowar Chapathi"],hl:["Virupaksha Temple","Mallikarjuna Temple","Sangameshwara Temple","Sculpture museum"],md:"Bagalkote Hospital (30km)",tr:"7 hrs from Bengaluru"},
+{id:22,n:"Yana",c:"Uttara Kannada",e:"🪨",t:"nature",tg:["Rock Formation","Trek","Nature"],ds:"Unique karst rock formations rising 100m amid lush forests.",co:700,w:4,ro:7,k:5,el:2,fa:5,du:1,bt:"Oct–Feb",tp:["Best in winter – avoid monsoon","Trek is 3km from base","Carry water"],fd:["Konkan Thali","Fish Curry","Neer Dosa"],hl:["Bhairaveshwara Shikhara","Mohini Shikhara","Forest trek","Cave temples"],md:"Sirsi Government Hospital",tr:"8 hrs from Bengaluru"},
+{id:23,n:"Kudremukh",c:"Chikmagalur",e:"🏞️",t:"nature",tg:["Trek","National Park","Peaks"],ds:"Horse-face peak in biodiverse Shola forests – pristine trekking.",co:1500,w:5,ro:7,k:3,el:2,fa:4,du:2,bt:"Sep–Jan",tp:["Trek permit – limited daily slots","14km return – start by 6 AM","Leeches in monsoon"],fd:["Malnad Chicken Curry","Akki Roti","Bamboo Shoot"],hl:["Kudremukh peak trek","Shola forests","Kadambi Falls","Kalasa village"],md:"Mudigere Hospital (35km)",tr:"6 hrs from Bengaluru"},
+{id:24,n:"Tungabhadra Dam",c:"Ballari",e:"💦",t:"nature",tg:["Dam","River","History"],ds:"Massive dam near Hampi with boat rides and reservoir views.",co:800,w:1,ro:6,k:7,el:8,fa:8,du:1,bt:"Oct–Feb",tp:["Sound & light show is excellent","Combine with Hampi","Gardens are free"],fd:["Bisi Bele Bath","Ragi Mudde","Tungabhadra Fish"],hl:["Dam & reservoir","Boat rides","Tungabhadra Gardens","Sound & light show"],md:"VIMS Hospital (15km)",tr:"6 hrs from Bengaluru"},
+{id:25,n:"Bidar",c:"Bidar",e:"🕌",t:"heritage",tg:["Fort","Deccan","History"],ds:"Bahamani Sultanate capital with medieval fort and Bidriware craft.",co:900,w:2,ro:5,k:5,el:7,fa:6,du:2,bt:"Oct–Mar",tp:["Visit Bidriware craft clusters","Allocate 3+ hours for fort","Mahmud Gawan Madrasa is unique"],fd:["Hyderabadi Biryani","Haleem","Shirmal","Kulfi"],hl:["Bidar Fort","Bahamani Tombs","Mahmud Gawan Madrasa","Bidriware craft"],md:"Bidar District Hospital",tr:"6 hrs from Bengaluru"}
+];
+
+const HOTELS={
+1:[{n:"Hyatt Place Hampi",p:5500,r:4.5,t:"Luxury",am:["Pool","Spa","Restaurant"],sp:true},{n:"Royal Orchid Hampi",p:3200,r:4.2,t:"Mid-range",am:["WiFi","Restaurant"],sp:true},{n:"Hampi Heritage Lodge",p:1800,r:4.0,t:"Budget",am:["WiFi","Breakfast"]}],
+2:[{n:"Evolve Back Coorg",p:8500,r:4.8,t:"Luxury",am:["Pool","Spa","Coffee tour"],sp:true},{n:"Club Mahindra Madikeri",p:4500,r:4.4,t:"Mid-range",am:["Pool","Restaurant"],sp:true},{n:"Misty Mountain Homestay",p:2200,r:4.3,t:"Budget",am:["Breakfast","Trek tours"]}],
+3:[{n:"Radisson Blu Mysuru",p:5800,r:4.6,t:"Luxury",am:["Pool","Spa","Gym"],sp:true},{n:"Fortune JP Palace",p:3800,r:4.4,t:"Mid-range",am:["Pool","Restaurant"],sp:true},{n:"Hotel Pai Vista",p:1600,r:4.1,t:"Budget",am:["WiFi","Breakfast"]}],
+4:[{n:"Om Beach Resort",p:4200,r:4.3,t:"Luxury",am:["Beach","Pool","Yoga"],sp:true},{n:"Namaste Cafe Cottages",p:1800,r:4.2,t:"Mid-range",am:["Beach","Cafe"]},{n:"Kudle Beach View",p:1200,r:4.0,t:"Budget",am:["Beach access"]}],
+5:[{n:"The Bandipur Safari Lodge",p:6500,r:4.6,t:"Luxury",am:["Safari","Pool"],sp:true},{n:"Country Club Bandipur",p:3500,r:4.3,t:"Mid-range",am:["Pool","Restaurant"],sp:true},{n:"Bandipur Forest Lodge",p:2000,r:4.0,t:"Budget",am:["Safari booking"]}],
+12:[{n:"Evolve Back Kabini",p:12500,r:4.9,t:"Luxury",am:["Pool","Safari","Spa"],sp:true},{n:"The Serai Kabini",p:9500,r:4.7,t:"Luxury",am:["Pool","Safari"],sp:true},{n:"Jungle Lodges Kabini",p:5500,r:4.4,t:"Mid-range",am:["Safari","Boat"]}]
+};
+const DEFAULT_HOTELS=[{n:"Treebo Karnataka Inn",p:2200,r:4.2,t:"Mid-range",am:["WiFi","Breakfast"],sp:true},{n:"OYO Townhouse",p:1400,r:4.0,t:"Budget",am:["WiFi","AC"],sp:true},{n:"Local Heritage Stay",p:1800,r:4.1,t:"Budget",am:["Breakfast","Local food"]}];
+
+const BREAKFAST={
+1:[{n:"Mango Tree Restaurant",d:"Famous Hampi breakfast",p:"₹200/person"},{n:"Laughing Buddha Cafe",d:"Riverside cafe",p:"₹250/person"}],
+2:[{n:"Coffee Estate Breakfast",d:"Farm-to-cup with idli vada",p:"₹300/person"},{n:"Raintree Restaurant",d:"Coorg specialty breakfast",p:"₹280/person"}],
+3:[{n:"Mylari Dosa",d:"Iconic Mysore butter dosa",p:"₹120/person"},{n:"Hotel Original Vinayaka",d:"Authentic South Indian",p:"₹150/person"}],
+4:[{n:"Namaste Cafe",d:"Beach breakfast spot",p:"₹220/person"},{n:"Prema Restaurant",d:"Traditional Konkan",p:"₹180/person"}],
+12:[{n:"Evolve Back Forest Buffet",d:"Riverside breakfast",p:"₹650/person"},{n:"JLR Kabini Mess",d:"Karnataka thali style",p:"₹350/person"}]
+};
+const DEFAULT_BREAKFAST=[{n:"Karnataka Heritage Cafe",d:"South Indian breakfast",p:"₹180/person"},{n:"Local Tiffin Center",d:"Authentic idli vada dosa",p:"₹120/person"}];
+
+const TC={
+couple:{key:"ro",spd:{relaxed:2,moderate:3,packed:4},desc:"💑 Couple mode: prioritizes romantic spots, sunset/sunrise viewpoints, scenic cafés & less crowded places.",emo:"💑"},
+family:{key:"fa",spd:{relaxed:2,moderate:3,packed:4},desc:"👨‍👩‍👧‍👦 Family mode: balanced mix of temples, wildlife & culture suitable for all ages.",emo:"👨‍👩‍👧‍👦"},
+elders:{key:"el",spd:{relaxed:2,moderate:2,packed:3},desc:"👴 Elder mode: low-walking routes, fewer hops/day, rest breaks every 60–90 mins, medical facilities flagged.",emo:"👴",walkCap:3},
+kids:{key:"k",spd:{relaxed:2,moderate:3,packed:4},desc:"👶 Kids mode: energy-aware with snack breaks, food stops, kid-friendly spots. Avoids strenuous treks.",emo:"👶",noStrenuous:true},
+youth:{key:"ro",spd:{relaxed:3,moderate:4,packed:5},desc:"🎒 Youth mode: adventure-packed with treks, water sports, budget stays. High-energy picks.",emo:"🎒"},
+solo:{key:"ro",spd:{relaxed:2,moderate:4,packed:5},desc:"🧍 Solo mode: flexible itinerary, safe well-connected spots, mix of social hostels and cafes.",emo:"🧍"}};
+
+const TIMES=["6:00 AM","8:30 AM","11:00 AM","12:30 PM","2:30 PM","4:30 PM","6:30 PM"];
+const WX=[["☀️","26°C"],["☀️","28°C"],["🌤️","32°C"],["🌤️","34°C"],["⛅","35°C"],["🌧️","28°C"],["🌧️","26°C"],["🌧️","26°C"],["⛅","28°C"],["🌤️","28°C"],["☀️","26°C"],["☀️","24°C"]];
+
+let ST={screen:"explore",filter:"all",search:"",traveler:"couple",mode:"car",budget:15000,days:3,people:2,city:"Bengaluru",pace:"relaxed",interests:[],plan:null,trips:0,totalDays:0,saved:[],recent:[],iTab:"overview",prevScreen:"explore",startDate:""};
+let currentUser=null;
+
+window.initAuth=function(){
+  if(window.FB){
+    window.fbAuth.onAuthChange(window.fbAuth.auth,async(user)=>{
+      if(user){
+        currentUser={uid:user.uid,name:user.displayName||user.email.split('@')[0],email:user.email};
+        await loadUserData();
+        showApp();
+      }else{
+        showAuth();
+      }
+      document.getElementById('APP-LOADER').classList.add('hide');
+    });
+  }else{
+    const saved=localStorage.getItem('kt_user');
+    if(saved){
+      currentUser=JSON.parse(saved);
+      loadUserDataLocal();
+      showApp();
+    }else{
+      showAuth();
+    }
+    document.getElementById('APP-LOADER').classList.add('hide');
+  }
+};
+
+function showAuth(){
+  document.getElementById('AUTH-SCR').classList.remove('hide');
+  document.getElementById('APP').style.display='none';
+}
+function showApp(){
+  document.getElementById('AUTH-SCR').classList.add('hide');
+  document.getElementById('APP').style.display='block';
+  document.getElementById('user-name').textContent=currentUser.name;
+  document.getElementById('user-email').textContent=currentUser.email;
+  document.getElementById('user-avatar').textContent=(currentUser.name||'U').charAt(0).toUpperCase();
+  const today=new Date().toISOString().split('T')[0];
+  const sd=document.getElementById('p-start-date');
+  if(sd&&!sd.value){sd.value=today;sd.min=today;updateEndDate();}
+  renderPlaces();
+  updateProfilePrefs();
+  updateProfileSaved();
+  updateProfileRecent();
+  document.getElementById('pr-trips').textContent=ST.trips;
+  document.getElementById('pr-days').textContent=ST.totalDays;
+  document.getElementById('pr-saved-c').textContent=ST.saved.length;
+}
+
+window.setAuthTab=function(t){
+  document.getElementById('tab-login').classList.toggle('on',t==='login');
+  document.getElementById('tab-signup').classList.toggle('on',t==='signup');
+  document.getElementById('login-form').style.display=t==='login'?'flex':'none';
+  document.getElementById('signup-form').style.display=t==='signup'?'flex':'none';
+};
+
+function showMsg(id,text,success){
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.className='AUTH-MSG show'+(success?' success':'');
+}
+
+window.handleLogin=async function(e){
+  e.preventDefault();
+  const email=document.getElementById('login-email').value;
+  const pwd=document.getElementById('login-password').value;
+  const btn=document.getElementById('login-btn');
+  btn.disabled=true;btn.innerHTML='<span class="LOADER"></span>Logging in...';
+  try{
+    if(window.FB){
+      await window.fbAuth.signInEmail(window.fbAuth.auth,email,pwd);
+    }else{
+      const users=JSON.parse(localStorage.getItem('kt_users')||'{}');
+      if(!users[email]||users[email].pwd!==pwd)throw new Error('Invalid email or password');
+      currentUser={uid:email,name:users[email].name,email};
+      localStorage.setItem('kt_user',JSON.stringify(currentUser));
+      loadUserDataLocal();
+      showApp();
+    }
+  }catch(err){
+    showMsg('login-msg',err.message||'Login failed');
+  }finally{
+    btn.disabled=false;btn.textContent='Log in';
+  }
+};
+
+window.handleSignup=async function(e){
+  e.preventDefault();
+  const name=document.getElementById('signup-name').value;
+  const email=document.getElementById('signup-email').value;
+  const pwd=document.getElementById('signup-password').value;
+  const btn=document.getElementById('signup-btn');
+  btn.disabled=true;btn.innerHTML='<span class="LOADER"></span>Creating account...';
+  try{
+    if(window.FB){
+      const cred=await window.fbAuth.createUser(window.fbAuth.auth,email,pwd);
+      await window.fbAuth.setDoc(window.fbAuth.doc(window.fbAuth.db,'users',cred.user.uid),{name,email,createdAt:Date.now(),trips:0,totalDays:0,saved:[],recent:[],prefs:{}});
+    }else{
+      const users=JSON.parse(localStorage.getItem('kt_users')||'{}');
+      if(users[email])throw new Error('Email already exists');
+      users[email]={name,pwd};
+      localStorage.setItem('kt_users',JSON.stringify(users));
+      currentUser={uid:email,name,email};
+      localStorage.setItem('kt_user',JSON.stringify(currentUser));
+      loadUserDataLocal();
+      showApp();
+    }
+  }catch(err){
+    showMsg('signup-msg',err.message||'Signup failed');
+  }finally{
+    btn.disabled=false;btn.textContent='Create account';
+  }
+};
+
+window.signInWithGoogle=async function(){
+  if(!window.FB){
+    alert('Google sign-in needs Firebase. Add your Firebase config to enable it.');
+    return;
+  }
+  try{
+    const provider=new window.fbAuth.GoogleAuthProvider();
+    const result=await window.fbAuth.signInGoogleFn(window.fbAuth.auth,provider);
+    const u=result.user;
+    const userDoc=await window.fbAuth.getDoc(window.fbAuth.doc(window.fbAuth.db,'users',u.uid));
+    if(!userDoc.exists()){
+      await window.fbAuth.setDoc(window.fbAuth.doc(window.fbAuth.db,'users',u.uid),{name:u.displayName,email:u.email,createdAt:Date.now(),trips:0,totalDays:0,saved:[],recent:[],prefs:{}});
+    }
+  }catch(err){
+    showMsg('login-msg',err.message||'Google sign-in failed');
+  }
+};
+
+window.handleLogout=async function(){
+  if(window.FB){
+    await window.fbAuth.signOutFn(window.fbAuth.auth);
+  }else{
+    localStorage.removeItem('kt_user');
+    currentUser=null;
+    ST={...ST,trips:0,totalDays:0,saved:[],recent:[],plan:null};
+    showAuth();
+  }
+};
+
+async function loadUserData(){
+  if(!window.FB||!currentUser)return;
+  try{
+    const snap=await window.fbAuth.getDoc(window.fbAuth.doc(window.fbAuth.db,'users',currentUser.uid));
+    if(snap.exists()){
+      const d=snap.data();
+      ST.trips=d.trips||0;ST.totalDays=d.totalDays||0;
+      ST.saved=d.saved||[];ST.recent=d.recent||[];
+      if(d.lastPlan)ST.plan=d.lastPlan;
+    }
+  }catch(e){console.error('Load failed:',e);}
+}
+
+function loadUserDataLocal(){
+  if(!currentUser)return;
+  const key='kt_data_'+currentUser.email;
+  const d=JSON.parse(localStorage.getItem(key)||'{}');
+  ST.trips=d.trips||0;ST.totalDays=d.totalDays||0;
+  ST.saved=d.saved||[];ST.recent=d.recent||[];
+  if(d.lastPlan)ST.plan=d.lastPlan;
+}
+
+async function saveUserData(){
+  if(!currentUser)return;
+  const data={trips:ST.trips,totalDays:ST.totalDays,saved:ST.saved,recent:ST.recent,lastPlan:ST.plan};
+  if(window.FB){
+    try{await window.fbAuth.setDoc(window.fbAuth.doc(window.fbAuth.db,'users',currentUser.uid),data,{merge:true});}
+    catch(e){console.error('Save failed:',e);}
+  }else{
+    localStorage.setItem('kt_data_'+currentUser.email,JSON.stringify(data));
+  }
+}
+
+window.nav=function(s){
+  document.querySelectorAll('.SCR').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.NI').forEach(x=>x.classList.remove('on'));
+  document.getElementById('S-'+s).classList.add('on');
+  const ni=document.getElementById('nav-'+s);
+  if(ni)ni.classList.add('on');
+  ST.screen=s;
+  window.scrollTo(0,0);
+};
+
+window.goBack=function(){nav(ST.prevScreen||'explore');};
+
+window.updateEndDate=function(){
+  const sd=document.getElementById('p-start-date').value;
+  const days=Math.min(Math.max(parseInt(document.getElementById('p-days').value)||3,1),10);
+  if(sd){
+    const end=new Date(sd+'T00:00:00');
+    end.setDate(end.getDate()+days-1);
+    document.getElementById('p-end-date').value=end.toISOString().split('T')[0];
+  }
+};
+
+function fmtDate(s){
+  if(!s)return '';
+  const d=new Date(s+'T00:00:00');
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+}
+function addDays(s,n){
+  const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);
+  return d.toISOString().split('T')[0];
+}
+
+window.setFilter=function(f,el){
+  document.querySelectorAll('.FROW .CHIP').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');ST.filter=f;renderPlaces();
+};
+window.setType=function(t,el){
+  el.parentElement.querySelectorAll('.CHIP').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');ST.traveler=t;
+  document.getElementById('typeDesc').textContent=TC[t].desc;
+};
+window.setMode=function(m,el){
+  el.parentElement.querySelectorAll('.CHIP').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');ST.mode=m;
+};
+window.toggleInterest=function(i,el){
+  el.classList.toggle('on');
+  if(ST.interests.includes(i))ST.interests=ST.interests.filter(x=>x!==i);
+  else ST.interests.push(i);
+};
+window.setPace=function(p,el){
+  el.parentElement.querySelectorAll('.CHIP').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');ST.pace=p;
+};
+window.setITab=function(t,el){
+  document.querySelectorAll('.TB').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');ST.iTab=t;renderItinTab();
+};
+
+function renderPlaces(){
+  const q=ST.search.toLowerCase();
+  const filtered=PL.filter(p=>{
+    const mf=ST.filter==='all'||p.t===ST.filter;
+    const ms=!q||p.n.toLowerCase().includes(q)||p.c.toLowerCase().includes(q)||p.tg.some(t=>t.toLowerCase().includes(q));
+    return mf&&ms;
+  });
+  const el=document.getElementById('plist');
+  if(!filtered.length){el.innerHTML='<div style="text-align:center;padding:2rem;color:var(--mx)">No places found</div>';return;}
+  el.innerHTML=filtered.map(p=>{
+    const isSaved=ST.saved.includes(p.id);
+    return `
+    <div class="PC" onclick="showDetail(${p.id})">
+      <div class="PC-IMG ${p.t}">
+        <img src="${getImage(p.id)}" alt="${p.n}" onerror="this.parentElement.classList.add('fallback')" loading="lazy">
+        <div class="PC-IMG-EMOJI">${p.e}</div>
+        <div onclick="event.stopPropagation();toggleSaveFromCard(${p.id},this)" class="save-btn ${isSaved?'on':''}">🔖</div>
+        ${p.bt?`<div class="img-badge">Best: ${p.bt}</div>`:''}
+      </div>
+      <div class="PC-CONTENT">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+          <div class="PN">${p.n}</div>
+          ${p.ro>=8?'<span class="SCORE r">❤️ Romantic</span>':''}
+          ${p.el>=8?'<span class="SCORE g">👴 Elder</span>':''}
+        </div>
+        <div class="PL">📍 ${p.c}</div>
+        <div class="PTAGS">${p.tg.map((t,i)=>`<span class="TAG${i===1?' t':i===2?' a':''}">${t}</span>`).join('')}</div>
+        <div style="font-size:11px;color:var(--mx);margin-top:6px;font-weight:600">~₹${p.co.toLocaleString('en-IN')}/person · ${p.du}h visit</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleSaveFromCard=function(id,el){
+  if(ST.saved.includes(id))ST.saved=ST.saved.filter(x=>x!==id);
+  else ST.saved.push(id);
+  el.classList.toggle('on');
+  document.getElementById('pr-saved-c').textContent=ST.saved.length;
+  updateProfileSaved();saveUserData();
+};
+
+window.toggleSave=function(id,el){
+  if(ST.saved.includes(id))ST.saved=ST.saved.filter(x=>x!==id);
+  else ST.saved.push(id);
+  el.classList.toggle('on');
+  document.getElementById('pr-saved-c').textContent=ST.saved.length;
+  updateProfileSaved();saveUserData();
+};
+
+window.showDetail=function(id){
+  const p=PL.find(x=>x.id===id);if(!p)return;
+  ST.prevScreen=ST.screen;
+  if(!ST.recent.includes(id)){ST.recent.unshift(id);if(ST.recent.length>5)ST.recent.pop();updateProfileRecent();saveUserData();}
+  const fc=p.w<=2?'var(--tl)':p.w<=3?'var(--am)':'var(--rd)';
+  const fl=p.w<=2?'Easy walk':p.w<=3?'Moderate':'Strenuous';
+  const hotels=HOTELS[p.id]||DEFAULT_HOTELS;
+  const meals=BREAKFAST[p.id]||DEFAULT_BREAKFAST;
+  document.getElementById('dbody').innerHTML=`
+    <div class="HERO-IMG ${p.t}">
+      <img src="${getImage(p.id)}" alt="${p.n}" onerror="this.parentElement.classList.add('fallback')">
+      <div class="HERO-EMOJI">${p.e}</div>
+      <div class="HERO-OVERLAY">
+        <div class="HERO-NAME">${p.n}</div>
+        <div class="HERO-LOC">📍 ${p.c} · Best: ${p.bt}</div>
+      </div>
+    </div>
+    <div style="padding:14px 16px 4px;font-size:13px;color:var(--mx);line-height:1.6">${p.ds}</div>
+    <div class="SM2" style="padding-top:8px">
+      <div class="SB"><div class="SBV">₹${p.co.toLocaleString('en-IN')}</div><div class="SBL">Per person</div></div>
+      <div class="SB"><div class="SBV">${p.du}h</div><div class="SBL">Visit time</div></div>
+      <div class="SB"><div class="SBV" style="font-size:13px;color:${fc}">${fl}</div><div class="SBL">Walking</div></div>
+      <div class="SB"><div class="SBV" style="font-size:13px">❤️ ${p.ro}/10</div><div class="SBL">Romantic</div></div>
+    </div>
+    <div class="SLB">Top highlights</div>
+    <div class="CARD" style="padding:8px 14px">${p.hl.map(h=>`<div class="HRROW"><div class="HRI">⭐</div><div class="HRL">${h}</div></div>`).join('')}</div>
+    <div class="SLB">Tips from locals</div>
+    <div class="CARD" style="padding:8px 14px">${p.tp.map(t=>`<div class="HRROW"><div class="HRI">💡</div><div class="HRL">${t}</div></div>`).join('')}</div>
+    <div class="SLB">Where to stay <span class="PILL-NEW">Sponsored</span></div>
+    ${hotels.map(h=>`<div class="HOTEL">${h.sp?'<div class="SPON">SPONSORED</div>':''}<div class="HNM">${h.n}</div><div class="HMETA"><b>₹${h.p.toLocaleString('en-IN')}/night</b><span class="RATING">⭐ ${h.r}</span><span>${h.t}</span></div><div class="HAMEN">${h.am.map(a=>`<span class="HAM">${a}</span>`).join('')}</div></div>`).join('')}
+    <div class="SLB">Breakfast & food spots</div>
+    <div class="CARD" style="padding:8px 14px">${meals.map(m=>`<div class="MEAL"><div class="MEALI">🍽️</div><div style="flex:1;min-width:0"><div class="MN">${m.n}</div><div class="MS">${m.d}</div></div><div class="MP">${m.p}</div></div>`).join('')}</div>
+    <div class="SLB">Local food to try</div>
+    <div style="padding:0 12px 10px;display:flex;flex-wrap:wrap;gap:5px">${p.fd.map(f=>`<span class="INFOTAG">🥘 ${f}</span>`).join('')}</div>
+    <div class="SLB">Getting there</div>
+    <div class="CARD" style="padding:10px 14px">
+      <div style="font-size:12px;color:var(--tx);padding:4px 0;display:flex;gap:6px"><span>🚌</span><span>${p.tr}</span></div>
+      <div style="font-size:12px;color:var(--mx);padding:4px 0;display:flex;gap:6px"><span>🏥</span><span>${p.md}</span></div>
+    </div>
+    <div style="padding:6px 12px 20px"><button class="BTNP" onclick="nav('plan')">Add to trip plan →</button></div>
+  `;
+  nav('detail');
+};
+
+window.generatePlan=function(){
+  const budget=parseInt(document.getElementById('p-budget').value)||15000;
+  const days=Math.min(Math.max(parseInt(document.getElementById('p-days').value)||3,1),10);
+  const people=Math.max(parseInt(document.getElementById('p-people').value)||2,1);
+  const city=document.getElementById('p-city').value;
+  const startDate=document.getElementById('p-start-date').value;
+  ST.budget=budget;ST.days=days;ST.people=people;ST.city=city;ST.startDate=startDate;
+  const cfg=TC[ST.traveler];
+  const spd=cfg.spd[ST.pace];
+  const scored=PL.map(p=>{
+    let s=p[cfg.key]||5;
+    if(cfg.walkCap&&p.w>cfg.walkCap)s-=4;
+    if(cfg.noStrenuous&&p.w>=5)s-=5;
+    ST.interests.forEach(i=>{
+      const m={temples:'temple',nature:'nature',beaches:'beach',heritage:'heritage',wildlife:'wildlife',adventure:'hills'};
+      if(m[i]===p.t)s+=2;
+    });
+    return{...p,score:s};
+  }).sort((a,b)=>b.score-a.score);
+  const used=new Set();const itinDays=[];
+  for(let d=0;d<days;d++){
+    const spots=[];
+    for(let p of scored){if(spots.length>=spd)break;if(!used.has(p.id)){spots.push(p);used.add(p.id);}}
+    if(!spots.length)break;
+    const stops=[];
+    spots.forEach((pl,i)=>{
+      stops.push({time:TIMES[Math.min(i*2,TIMES.length-1)],name:pl.n,note:pl.ds.substring(0,55)+'...',e:pl.e,id:pl.id});
+      if((ST.traveler==='kids'||ST.traveler==='elders')&&i<spots.length-1){
+        stops.push({time:TIMES[Math.min(i*2+1,TIMES.length-1)],name:ST.traveler==='kids'?'Snack & rest':'Rest & refresh',note:'Break stop',e:'⏸️',isBreak:true});
+      }
+    });
+    const avgW=spots.reduce((s,p)=>s+p.w,0)/spots.length;
+    const fatigue=avgW<=2?'Low':avgW<=3.5?'Medium':'High';
+    const fatigueN=Math.round((avgW/5)*100);
+    const dayCost=Math.round((budget/people/days)*0.85+spots.reduce((s,p)=>s+Math.round(p.co*0.15),0));
+    itinDays.push({d:d+1,spots,stops,fatigue,fatigueN,dayCost});
+  }
+  const total=Math.round(itinDays.reduce((s,d)=>s+d.dayCost,0)*people);
+  const mn=new Date().getMonth();
+  const wx=Array.from({length:days},(_,i)=>WX[(mn+Math.floor(i/30))%12]);
+  ST.plan={days:itinDays,total,budget,people,daysN:days,city,type:ST.traveler,pace:ST.pace,mode:ST.mode,wx,startDate};
+  ST.trips++;ST.totalDays+=days;
+  document.getElementById('pr-trips').textContent=ST.trips;
+  document.getElementById('pr-days').textContent=ST.totalDays;
+  updateProfilePrefs();saveUserData();
+  document.getElementById('i-empty').style.display='none';
+  document.getElementById('i-content').style.display='block';
+  const dateRange=startDate?fmtDate(startDate)+' – '+fmtDate(addDays(startDate,days-1))+' · ':'';
+  document.getElementById('i-sub').textContent=dateRange+days+' days · '+people+' people · ₹'+budget.toLocaleString('en-IN');
+  document.querySelectorAll('.TB').forEach(x=>x.classList.remove('on'));
+  document.querySelector('.TB').classList.add('on');
+  ST.iTab='overview';
+  renderItinTab();
+  nav('itinerary');
+};
+
+function renderItinTab(){
+  const plan=ST.plan;if(!plan)return;
+  const el=document.getElementById('it-content');
+  const tab=ST.iTab;
+  if(tab==='overview'){
+    const avgFN=Math.round(plan.days.reduce((s,d)=>s+d.fatigueN,0)/plan.days.length);
+    const avgFL=avgFN<=35?'Low':avgFN<=65?'Medium':'High';
+    const fc=avgFN<=35?'var(--tl)':avgFN<=65?'var(--am)':'var(--rd)';
+    const modeIcon={car:'🚗',bus:'🚌',train:'🚆',bike:'🏍️',mixed:'🚐'}[plan.mode]||'🚗';
+    const notes={couple:'💕 Romantic highlights: '+(plan.days.flatMap(d=>d.spots).filter(p=>p.ro>=8).map(p=>p.n).slice(0,3).join(', ')||'Scenic spots selected'),elders:'👴 Low-walk routes, rest breaks every day, medical facilities flagged.',kids:'👶 Snack breaks added, strenuous spots removed.',family:'👨‍👩‍👧‍👦 Balanced mix for all ages.',youth:'🎒 Adventure-packed picks.',solo:'🧍 Flexible, safe, well-connected.'};
+    el.innerHTML=`
+      <div class="SM2">
+        <div class="SB"><div class="SBV">${plan.days.length}</div><div class="SBL">Days</div></div>
+        <div class="SB"><div class="SBV">${plan.people}</div><div class="SBL">Travelers</div></div>
+        <div class="SB"><div class="SBV">₹${(plan.total/1000).toFixed(1)}K</div><div class="SBL">Est. cost</div></div>
+        <div class="SB"><div class="SBV">${plan.days.reduce((s,d)=>s+d.spots.length,0)}</div><div class="SBL">Destinations</div></div>
+      </div>
+      <div style="padding:0 12px 8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:12px;color:var(--mx);font-weight:600">Travel fatigue</span>
+          <span style="font-size:11px;font-weight:700;color:${fc}">${avgFL}</span>
+        </div>
+        <div class="FBR" style="margin:0;height:8px"><div class="FBF" style="width:${avgFN}%;background:${fc}"></div></div>
+      </div>
+      <div class="ALT"><span>${notes[plan.type]}</span></div>
+      <div class="CARD" style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:12px;color:var(--mx);font-weight:600">Travel mode</div><div style="font-size:14px;font-weight:700;margin-top:2px">${modeIcon} ${plan.mode}</div></div>
+        <div style="text-align:right"><div style="font-size:12px;color:var(--mx);font-weight:600">Starting</div><div style="font-size:14px;font-weight:700;margin-top:2px">📍 ${plan.city}</div></div>
+      </div>
+      <div class="SLB">Weather outlook</div>
+      <div class="WROW">${plan.wx.map((w,i)=>`<div class="WC"><div class="WD">Day ${i+1}</div><div class="WI">${w[0]}</div><div class="WT">${w[1]}</div></div>`).join('')}</div>
+    `;
+  }
+  if(tab==='days'){
+    el.innerHTML=plan.days.map(d=>{
+      const dayLabel=plan.startDate?` · ${fmtDate(addDays(plan.startDate,d.d-1))}`:'';
+      return `
+      <div class="DDB">
+        <div class="DDH">
+          <div class="DDT">Day ${d.d}${dayLabel} — ${d.spots.map(s=>s.n).join(' · ')}</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <span style="font-size:10px;padding:2px 7px;border-radius:100px;background:${d.fatigue==='Low'?'var(--tl-l)':d.fatigue==='Medium'?'var(--am-l)':'var(--rd-l)'};color:${d.fatigue==='Low'?'#085041':d.fatigue==='Medium'?'#633806':'var(--rd)'};font-weight:700">${d.fatigue}</span>
+            <div class="DDC">₹${d.dayCost.toLocaleString('en-IN')}</div>
+          </div>
+        </div>
+        <div class="DDS">${d.stops.map(s=>`
+          <div class="SRW">
+            <div class="STM">${s.time}</div>
+            <div style="flex:1;min-width:0">
+              <div class="SNM">${s.e} ${s.name}</div>
+              <div class="SNT">${s.note}</div>
+            </div>
+            ${!s.isBreak?`<button onclick="showDetail(${s.id})" style="font-size:10px;color:var(--or);background:var(--or-l);border:none;padding:4px 9px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">Info</button>`:''}
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  if(tab==='budget'){
+    const pp=Math.round(plan.total/plan.people),pd=Math.round(pp/plan.daysN),rem=plan.budget-plan.total;
+    const tr=Math.round(plan.total*0.35),ac=Math.round(plan.total*0.35),fo=Math.round(plan.total*0.20),en=Math.round(plan.total*0.10);
+    el.innerHTML=`
+      <div class="FBB">
+        <div class="BBR"><span class="BBL">🚌 Transport (35%)</span><span class="BBV">₹${tr.toLocaleString('en-IN')}</span></div>
+        <div class="BBR"><span class="BBL">🏨 Accommodation (35%)</span><span class="BBV">₹${ac.toLocaleString('en-IN')}</span></div>
+        <div class="BBR"><span class="BBL">🍽️ Food (20%)</span><span class="BBV">₹${fo.toLocaleString('en-IN')}</span></div>
+        <div class="BBR"><span class="BBL">🎟️ Entry fees (10%)</span><span class="BBV">₹${en.toLocaleString('en-IN')}</span></div>
+        <div class="BBR BBT"><span class="BBL">Total estimated</span><span class="BBV">₹${plan.total.toLocaleString('en-IN')}</span></div>
+      </div>
+      <div class="SM2">
+        <div class="SB"><div class="SBV">₹${pp.toLocaleString('en-IN')}</div><div class="SBL">Per person</div></div>
+        <div class="SB"><div class="SBV">₹${pd.toLocaleString('en-IN')}</div><div class="SBL">Per day/person</div></div>
+      </div>
+      <div style="background:${rem>=0?'var(--tl-l)':'var(--rd-l)'};border-radius:11px;padding:12px 14px;margin:0 12px 10px">
+        <div style="font-size:12px;color:${rem>=0?'#085041':'var(--rd)'};font-weight:700">
+          ${rem>=0?'✅ Within budget — ₹'+rem.toLocaleString('en-IN')+' buffer left':'⚠️ Over budget by ₹'+Math.abs(rem).toLocaleString('en-IN')}
+        </div>
+      </div>
+      <div class="CARD" style="font-size:11px;color:var(--mx);line-height:1.7">💡 Budget tip: Shared accommodation and KSRTC buses can reduce costs by 25–35%.</div>
+    `;
+  }
+  if(tab==='customize'){
+    const allSpots=plan.days.flatMap(d=>d.spots);
+    const available=PL.filter(p=>!allSpots.find(s=>s.id===p.id));
+    el.innerHTML=`
+      <div class="CARD" style="margin-bottom:8px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Your stops</div>
+        <div style="font-size:11px;color:var(--mx);margin-bottom:10px">Tap to view, swap or remove</div>
+        ${allSpots.map(p=>{const dayN=plan.days.findIndex(d=>d.spots.find(s=>s.id===p.id))+1;
+        return `<div class="LROW"><div class="LICO">${p.e}</div><div style="flex:1;min-width:0"><div class="LNMT">${p.n}</div><div class="LSUB">Day ${dayN} · ₹${p.co.toLocaleString('en-IN')}/person</div></div><div style="display:flex;gap:5px"><button onclick="showDetail(${p.id})" style="font-size:10px;color:var(--or);background:var(--or-l);border:none;padding:5px 9px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">Info</button><button onclick="removeStop(${p.id})" style="font-size:10px;color:var(--rd);background:var(--rd-l);border:none;padding:5px 9px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">Remove</button></div></div>`;}).join('')}
+      </div>
+      <div class="CARD" style="margin-bottom:8px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Add more stops</div>
+        <div style="font-size:11px;color:var(--mx);margin-bottom:10px">Tap + to add to itinerary</div>
+        ${available.slice(0,8).map(p=>`<div class="LROW"><div class="LICO">${p.e}</div><div style="flex:1;min-width:0"><div class="LNMT">${p.n}</div><div class="LSUB">${p.c} · ₹${p.co.toLocaleString('en-IN')} · ${p.du}h</div></div><button onclick="addStop(${p.id})" style="font-size:11px;color:#fff;background:var(--or);border:none;padding:6px 12px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">+ Add</button></div>`).join('')}
+      </div>
+      <div class="SLB" style="padding-left:0">Recommended hotels <span class="PILL-NEW">Sponsored</span></div>
+      ${(HOTELS[allSpots[0]?.id]||DEFAULT_HOTELS).slice(0,3).map(h=>`<div class="HOTEL">${h.sp?'<div class="SPON">SPONSORED</div>':''}<div class="HNM">${h.n}</div><div class="HMETA"><b>₹${h.p.toLocaleString('en-IN')}/night</b><span class="RATING">⭐ ${h.r}</span><span>${h.t}</span></div><div class="HAMEN">${h.am.map(a=>`<span class="HAM">${a}</span>`).join('')}</div></div>`).join('')}
+      <div class="SLB" style="padding-left:0">Breakfast for Day 1</div>
+      <div class="CARD" style="padding:8px 14px">${(BREAKFAST[allSpots[0]?.id]||DEFAULT_BREAKFAST).map(m=>`<div class="MEAL"><div class="MEALI">🥐</div><div style="flex:1;min-width:0"><div class="MN">${m.n}</div><div class="MS">${m.d}</div></div><div class="MP">${m.p}</div></div>`).join('')}</div>
+    `;
+  }
+}
+
+window.addStop=function(id){
+  if(!ST.plan)return;
+  const p=PL.find(x=>x.id===id);if(!p)return;
+  const lastDay=ST.plan.days[ST.plan.days.length-1];
+  lastDay.spots.push(p);
+  lastDay.stops.push({time:'5:30 PM',name:p.n,note:p.ds.substring(0,55)+'...',e:p.e,id:p.id});
+  const avgW=lastDay.spots.reduce((s,sp)=>s+sp.w,0)/lastDay.spots.length;
+  lastDay.fatigue=avgW<=2?'Low':avgW<=3.5?'Medium':'High';
+  lastDay.fatigueN=Math.round((avgW/5)*100);
+  lastDay.dayCost+=Math.round(p.co*0.15);
+  ST.plan.total+=Math.round(p.co*0.15*ST.plan.people);
+  saveUserData();renderItinTab();
+};
+window.removeStop=function(id){
+  if(!ST.plan)return;
+  ST.plan.days.forEach(d=>{d.spots=d.spots.filter(s=>s.id!==id);d.stops=d.stops.filter(s=>s.id!==id);});
+  ST.plan.days=ST.plan.days.filter(d=>d.spots.length>0);
+  saveUserData();renderItinTab();
+};
+
+function updateProfilePrefs(){
+  const plan=ST.plan;
+  const el=document.getElementById('pr-prefs');
+  if(!plan){el.innerHTML='<div style="font-size:12px;color:var(--mx)">No trips generated yet</div>';return;}
+  el.innerHTML=`
+    <div class="PR"><span class="PRL">Traveler type</span><span class="PRV">${TC[plan.type].emo} ${plan.type}</span></div>
+    <div class="PR"><span class="PRL">Travel mode</span><span class="PRV" style="text-transform:capitalize">${plan.mode}</span></div>
+    <div class="PR"><span class="PRL">Last duration</span><span class="PRV">${plan.daysN} days</span></div>
+    <div class="PR"><span class="PRL">Group size</span><span class="PRV">${plan.people} people</span></div>
+    <div class="PR"><span class="PRL">Pace</span><span class="PRV" style="text-transform:capitalize">${plan.pace}</span></div>
+    <div class="PR"><span class="PRL">Starting city</span><span class="PRV">${plan.city}</span></div>
+  `;
+}
+function updateProfileSaved(){
+  const el=document.getElementById('pr-saved');
+  if(!ST.saved.length){el.innerHTML='<div style="font-size:12px;color:var(--mx)">Tap the bookmark on any place to save it</div>';return;}
+  el.innerHTML=ST.saved.map(id=>{const p=PL.find(x=>x.id===id);return p?`<div class="LROW"><div class="LICO">${p.e}</div><div style="flex:1;min-width:0"><div class="LNMT">${p.n}</div><div class="LSUB">${p.c}</div></div><button onclick="showDetail(${p.id})" style="font-size:11px;color:var(--or);background:var(--or-l);border:none;padding:5px 10px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">View</button></div>`:''}).join('');
+}
+function updateProfileRecent(){
+  const el=document.getElementById('pr-recent');
+  if(!ST.recent.length){el.innerHTML='<div style="font-size:12px;color:var(--mx)">No destinations viewed yet</div>';return;}
+  el.innerHTML=ST.recent.map(id=>{const p=PL.find(x=>x.id===id);return p?`<div class="LROW"><div class="LICO">${p.e}</div><div style="flex:1;min-width:0"><div class="LNMT">${p.n}</div><div class="LSUB">${p.c} · ${p.bt}</div></div><button onclick="showDetail(${p.id})" style="font-size:11px;color:var(--or);background:var(--or-l);border:none;padding:5px 10px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">View</button></div>`:''}).join('');
+}
+</script>
+
+</body>
+</html>
