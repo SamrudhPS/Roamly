@@ -155,6 +155,4 @@ If an image URL ever breaks, the app automatically falls back to a colored gradi
 - Integrate Google Maps for actual routing between stops
 - Add image uploads to user profiles
 
-## License
 
-MIT — feel free to use for your college project.
