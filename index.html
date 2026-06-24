@@ -3,23 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Roamly">
-<meta name="application-name" content="Roamly">
-<link rel="apple-touch-icon" href="icons/icon-152.png">
-<link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72.png">
-<link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96.png">
-<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
-<link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
-<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72.png">
-<title>Roamly</title>
+<meta name="theme-color" content="#E8692A">
+<title>Karnataka Trip Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -321,7 +306,7 @@ html,body{height:100%;background:var(--bg);font-family:'Plus Jakarta Sans',-appl
   </div>
 
   <div id="S-detail" class="SCR">
-    <div class="ROL"><button class="MBCK" onclick="goBack()">← Back</button></div>
+    <div class="ROL"><button class="MBCK" onclick="nav('explore')">← Back</button></div>
     <div id="dbody"></div>
   </div>
 
@@ -356,8 +341,8 @@ html,body{height:100%;background:var(--bg);font-family:'Plus Jakarta Sans',-appl
         <div><label class="AUTH-LBL">People</label><input type="number" class="INN" id="p-people" value="2" min="1"></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
-        <div><label class="AUTH-LBL">Start date</label><input type="date" class="INN" id="p-start-date" oninput="updateEndDate()"></div>
-        <div><label class="AUTH-LBL">End date</label><input type="date" class="INN" id="p-end-date" readonly style="background:var(--bg);color:var(--mx);cursor:default"></div>
+        <div><label class="AUTH-LBL">Start date</label><input type="date" class="INN" id="p-start" oninput="updateEndDate()"></div>
+        <div><label class="AUTH-LBL">End date</label><input type="date" class="INN" id="p-end" readonly style="background:var(--bg);color:var(--mx)"></div>
       </div>
       <div><label class="AUTH-LBL">Starting from</label>
       <select class="SEL" id="p-city"><option>Bengaluru</option><option>Mysuru</option><option>Mangaluru</option><option>Hubli</option><option>Belagavi</option></select></div>
@@ -453,13 +438,20 @@ html,body{height:100%;background:var(--bg);font-family:'Plus Jakarta Sans',-appl
 // Get it from: Firebase Console → Project Settings → General → Your apps
 // If you leave it as below, the app runs in DEMO MODE with localStorage
 // ============================================================
-const FIREBASE_CONFIG = {
+FIREBASE_CONFIG = {
+
   apiKey: "AIzaSyDyqHRufxiBmZIdHNSdTSYfWaAqfk_YD50",
+
   authDomain: "roamly-tripplanner.firebaseapp.com",
+
   projectId: "roamly-tripplanner",
+
   storageBucket: "roamly-tripplanner.firebasestorage.app",
+
   messagingSenderId: "739633557979",
+
   appId: "1:739633557979:web:3f64f86faa3e2cc03137fe"
+
 };
 
 const USE_FIREBASE = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY_HERE";
@@ -517,31 +509,31 @@ function getImage(id){
 }
 
 const PL=[
-{id:1,n:"Hampi",c:"Ballari",e:"🏛️",t:"heritage",tg:["UNESCO","Heritage","Ruins"],ds:"Ancient Vijayanagara empire capital with stunning boulder landscapes.",co:1200,w:3,ro:7,k:7,el:4,fa:8,du:6,bt:"Oct–Feb",tp:["Visit Vittala Temple early to avoid crowds","Hire a local guide for rich history","Rent a bicycle to cover the vast site"],fd:["Bisi Bele Bath","Jolada Roti","Obbattu"],hl:["Virupaksha Temple","Vittala Temple","Stone Chariot","Elephant Stables","Lotus Mahal"],md:"District Hospital Hospet (13km)",tr:"6 hrs from Bengaluru via NH50"},
-{id:2,n:"Coorg",c:"Kodagu",e:"🌿",t:"hills",tg:["Coffee","Hills","Nature"],ds:"Scotland of India – misty coffee estates and Kodava culture.",co:2500,w:3,ro:9,k:6,el:5,fa:7,du:4,bt:"Oct–Mar",tp:["Book a coffee estate homestay","Carry warm clothes for evenings","Avoid monsoon for trekking"],fd:["Pandi Curry","Kadambuttu","Akki Roti"],hl:["Abbey Falls","Raja's Seat","Dubare Elephant Camp","Namdroling Monastery"],md:"Cauvery Hospital Madikeri (8km)",tr:"5 hrs from Bengaluru via Mysuru"},
-{id:3,n:"Mysuru",c:"Mysuru",e:"🏰",t:"heritage",tg:["Palace","Heritage","Culture"],ds:"City of palaces – royal heritage, silk, and Dasara grandeur.",co:1500,w:2,ro:7,k:8,el:9,fa:9,du:3,bt:"Year-round",tp:["Palace lit up every Sunday evening","Visit Devaraja Market for silk","Book Brindavan Gardens in advance"],fd:["Mysore Pak","Idli Vada Sambar","Masala Dosa"],hl:["Mysore Palace","Chamundi Hills","Brindavan Gardens","St. Philomena's Church","Mysore Zoo"],md:"JSS Hospital (3km)",tr:"3 hrs from Bengaluru via Expressway"},
-{id:4,n:"Gokarna",c:"Uttara Kannada",e:"🏖️",t:"beach",tg:["Beach","Temple","Sunset"],ds:"Sacred beach town with pristine coastline and Om Beach sunsets.",co:1800,w:3,ro:9,k:7,el:4,fa:7,du:3,bt:"Oct–Mar",tp:["Kudle Beach is quieter than Om","Trek to Paradise Beach at low tide","Carry cash – ATMs are limited"],fd:["Seafood Thali","Neer Dosa","Coconut Prawn Curry"],hl:["Om Beach","Kudle Beach","Mahabaleshwara Temple","Paradise Beach","Sunset viewpoint"],md:"Gokarna PHC",tr:"8 hrs from Bengaluru via NH66"},
-{id:5,n:"Bandipur",c:"Chamarajanagar",e:"🐘",t:"wildlife",tg:["Safari","Wildlife","Tiger Reserve"],ds:"Top tiger reserve and elephant corridor in the Nilgiri Biosphere.",co:2000,w:1,ro:6,k:9,el:7,fa:10,du:2,bt:"Mar–May, Oct–Nov",tp:["Book safari slots online in advance","Morning safaris (6–9 AM) are best","Stay within resort – no night movement"],fd:["Karnataka Thali","Ragi Mudde","Sambar Rice"],hl:["Jeep safari","Elephant herds","Bird watching","Tiger Reserve"],md:"NIMHANS Mysuru (80km)",tr:"4 hrs from Bengaluru"},
-{id:6,n:"Chikmagalur",c:"Chikmagalur",e:"⛰️",t:"hills",tg:["Coffee","Trekking","Hills"],ds:"First coffee-grown land with Mullayanagiri, Karnataka's highest peak.",co:2200,w:4,ro:8,k:5,el:4,fa:6,du:3,bt:"Sep–Mar",tp:["Mullayanagiri trek best at sunrise","Coffee estate tours included with stay","Baba Budangiri has restricted night access"],fd:["Filter Coffee","Kesari Bath","Akki Roti"],hl:["Mullayanagiri peak","Baba Budangiri","Coffee estate trek","Hebbe Falls"],md:"Chikmagalur District Hospital",tr:"5 hrs from Bengaluru"},
-{id:7,n:"Belur & Halebidu",c:"Hassan",e:"🗿",t:"temple",tg:["Hoysala","Temple","Architecture"],ds:"12th century Hoysala temples – India's finest stone sculptures.",co:800,w:2,ro:6,k:6,el:8,fa:7,du:3,bt:"Oct–Feb",tp:["Hire ASI guide for ₹200","Photography allowed without flash","Combine both in one day"],fd:["Obbattu","Bisi Bele Bath","Mysore Pak"],hl:["Chennakeshava Temple","Hoysaleswara Temple","Kedareshwara Temple","Sculpture museum"],md:"Hassan Government Hospital",tr:"4 hrs from Bengaluru"},
-{id:8,n:"Murudeshwar",c:"Uttara Kannada",e:"🙏",t:"temple",tg:["Temple","Sea","Shiva Statue"],ds:"Towering 20-storey Shiva statue by the Arabian Sea.",co:1400,w:2,ro:7,k:7,el:6,fa:8,du:2,bt:"Oct–Mar",tp:["Take Raja Gopura lift for sea views","Scuba diving at Netrani Island","Temple darshan is free"],fd:["Mangalorean Fish Curry","Neer Dosa","Kundapur Chicken"],hl:["Murudeshwara Temple","20-storey Shiva statue","Netrani Island diving","Sea beach"],md:"Bhatkal CHC (18km)",tr:"7 hrs from Bengaluru"},
-{id:9,n:"Jog Falls",c:"Shivamogga",e:"💧",t:"nature",tg:["Waterfall","Nature","Monsoon"],ds:"India's second highest plunge waterfall – best in monsoon.",co:900,w:3,ro:8,k:8,el:5,fa:9,du:2,bt:"Jul–Oct",tp:["Jul–Sep for max water flow","Descent to base is steep – wear sturdy shoes","Free government viewpoint"],fd:["Ragi Mudde","Akki Roti","Jolada Roti"],hl:["Raja Falls","Rani Falls","Rover Falls","Roarer Falls"],md:"Sagar Hospital (30km)",tr:"5 hrs from Bengaluru"},
-{id:10,n:"Dandeli",c:"Uttara Kannada",e:"🛶",t:"wildlife",tg:["Rafting","Wildlife","Adventure"],ds:"Adventure capital with river rafting and Kali Tiger Reserve.",co:2500,w:3,ro:6,k:7,el:3,fa:7,du:2,bt:"Oct–May",tp:["Book rafting in advance","Carry dry bags","Night jungle drives with permits"],fd:["Bamboo Chicken","Malvani Crab","Forest Thali"],hl:["White water rafting","Kuleni Forest","Bird watching","Kayaking"],md:"Dandeli Government Hospital",tr:"9 hrs from Bengaluru"},
-{id:11,n:"Badami",c:"Bagalkote",e:"🏔️",t:"heritage",tg:["Cave Temples","Chalukya","Heritage"],ds:"6th century Chalukyan cave temples in red sandstone cliffs.",co:1000,w:3,ro:6,k:6,el:5,fa:7,du:3,bt:"Oct–Mar",tp:["All 4 caves in 3–4 hours","Wear covered footwear","Cave 3 has best carvings"],fd:["Jowar Roti","North Karnataka Thali","Shenga Holige"],hl:["Cave Temple 1-4","Bhutanatha Temple","Agastya Lake","Archaeological Museum"],md:"Badami Government Hospital",tr:"6 hrs from Bengaluru"},
-{id:12,n:"Kabini",c:"Mysuru",e:"🌊",t:"wildlife",tg:["Safari","Backwaters","Wildlife"],ds:"Pristine backwaters and finest wildlife spot in Nagarhole.",co:3500,w:1,ro:9,k:8,el:7,fa:9,du:2,bt:"Jun–Oct",tp:["Boat safari is more scenic than jeep","Book Jungle Lodges months ahead","Elephant herds in summer"],fd:["Forest Thali","Ragi Mudde","Bamboo Biryani"],hl:["Backwater boat safari","Kabini Dam","Elephant herds","Tiger spotting"],md:"H.D. Kote Hospital (18km)",tr:"4.5 hrs from Bengaluru"},
-{id:13,n:"Udupi",c:"Udupi",e:"🍜",t:"temple",tg:["Temple","Food","Culture"],ds:"Birthplace of Udupi cuisine, home of the Krishna Temple.",co:1200,w:2,ro:5,k:8,el:9,fa:9,du:2,bt:"Oct–Mar",tp:["Temple prasad is free & delicious","Malpe Beach is 5km away","Paryaya festival is spectacular"],fd:["Udupi Thali","Neer Dosa","Kane Fish Fry","Kodbale"],hl:["Sri Krishna Temple","Malpe Beach","St. Mary's Islands","Anantheshwara Temple"],md:"KMC Manipal (8km)",tr:"5.5 hrs from Bengaluru"},
-{id:14,n:"Sakleshpur",c:"Hassan",e:"🚂",t:"hills",tg:["Coffee","Railway","Trekking"],ds:"Lush coffee trail and heritage railway trek through Ghats.",co:1800,w:4,ro:8,k:5,el:4,fa:6,du:2,bt:"Sep–Feb",tp:["Railway trek needs Forest permit","Carry rain gear","Farm-to-cup coffee stays"],fd:["Filter Coffee","Akki Roti","Pandi Curry"],hl:["Heritage railway trek","Coffee estate tours","Manjarabad Fort","Bisle Ghat"],md:"Sakleshpur Government Hospital",tr:"4.5 hrs from Bengaluru"},
-{id:15,n:"Nandi Hills",c:"Chikkaballapura",e:"🌄",t:"hills",tg:["Sunrise","Hills","Cycling"],ds:"Tipu Sultan's summer retreat – legendary sunrise and paragliding.",co:900,w:2,ro:8,k:7,el:6,fa:8,du:1,bt:"Sep–Feb",tp:["Arrive before 5:30 AM for sunrise","Paragliding Oct–Feb with booking","Bhoga Nandeeshwara at base is overlooked"],fd:["Corn on the cob","Kaveri Restaurant breakfast","Filter coffee"],hl:["Sunrise viewpoint","Tipu's Drop","Bhoga Nandeeshwara Temple","Paragliding zone"],md:"Chikkaballapura Hospital (20km)",tr:"1.5 hrs from Bengaluru"},
-{id:16,n:"Nagarhole",c:"Mysuru",e:"🐯",t:"wildlife",tg:["Tiger Reserve","Safari","Nature"],ds:"Rajiv Gandhi National Park – tigers and Asian elephants corridor.",co:2000,w:1,ro:7,k:9,el:7,fa:10,du:2,bt:"Oct–May",tp:["Morning safari slots are gold","Kabini river edge is wildlife hotspot","Book permit on KFD website"],fd:["Karnataka Thali","Ragi Mudde","Local Honey"],hl:["Jeep safari","River edge wildlife","Nagarhole river cruise","Tribal village walk"],md:"H.D. Kote Hospital (25km)",tr:"4.5 hrs from Bengaluru"},
-{id:17,n:"St. Mary's Islands",c:"Udupi",e:"🏝️",t:"beach",tg:["Island","Beach","Basalt Rocks"],ds:"Unique hexagonal basalt rock formations on a pristine island.",co:1200,w:2,ro:9,k:8,el:5,fa:8,du:1,bt:"Oct–Apr",tp:["Boat from Malpe Beach (first 9 AM)","Island closes at 5 PM","No food stalls – carry snacks"],fd:["Coconut Water","Malpe Seafood","Sol Kadhi"],hl:["Basalt formations","Coconut Island","Snorkeling","Lighthouse view"],md:"KMC Manipal (10km)",tr:"5.5 hrs from Bengaluru"},
-{id:18,n:"Shravanabelagola",c:"Hassan",e:"🗿",t:"temple",tg:["Jain","Gommateshwara","Pilgrimage"],ds:"Tallest monolithic statue – 58ft Gommateshwara from single rock.",co:600,w:3,ro:4,k:5,el:4,fa:6,du:1,bt:"Oct–Mar",tp:["700 steps – sturdy footwear essential","Visit early before heat","Mahamastakabhisheka every 12 years"],fd:["Dharwad Pedha","Mysore Pak","North Karnataka Thali"],hl:["Gommateshwara statue","Chandragiri Hill","Jain pilgrimage complex","Top view"],md:"Hassan Hospital (50km)",tr:"3 hrs from Bengaluru"},
-{id:19,n:"Chitradurga Fort",c:"Chitradurga",e:"🏯",t:"heritage",tg:["Fort","History","Architecture"],ds:"Impregnable fortress with 7 concentric walls and 19 temples.",co:700,w:3,ro:5,k:7,el:5,fa:8,du:2,bt:"Oct–Feb",tp:["Entry ₹25 for Indians","Wear comfortable shoes","Obavva's passage is most popular"],fd:["Jowar Roti","Ragi Mudde","Chitradurga Mixture"],hl:["Fort ramparts","Hidimbeshwara Temple","Obavva's passage","Hill views"],md:"Chitradurga Hospital (3km)",tr:"3.5 hrs from Bengaluru"},
-{id:20,n:"Agumbe",c:"Shivamogga",e:"🌧️",t:"nature",tg:["Rainforest","Sunset","Biodiversity"],ds:"Cherrapunji of the South – rainforest and king cobra territory.",co:1000,w:3,ro:8,k:6,el:4,fa:6,du:2,bt:"Jun–Oct, Dec–Jan",tp:["Best in monsoon – carry waterproofs","ARRS guided tours","Night walks with booking"],fd:["Malnad Cuisine","Neer Dosa","Jackfruit Dishes"],hl:["Sunset Point","Barkana Falls","Rainforest trails","Onake Abbi Falls"],md:"Thirthahalli Hospital (35km)",tr:"5 hrs from Bengaluru"},
-{id:21,n:"Pattadakal",c:"Bagalkote",e:"🏛️",t:"heritage",tg:["UNESCO","Chalukya","Temples"],ds:"UNESCO site with 8th century Chalukyan temples.",co:800,w:2,ro:5,k:6,el:7,fa:7,du:2,bt:"Oct–Feb",tp:["Combine with Badami & Aihole","ASI guide for ₹250","Entry ₹40 Indians"],fd:["North Karnataka Thali","Shenga Holige","Jowar Chapathi"],hl:["Virupaksha Temple","Mallikarjuna Temple","Sangameshwara Temple","Sculpture museum"],md:"Bagalkote Hospital (30km)",tr:"7 hrs from Bengaluru"},
-{id:22,n:"Yana",c:"Uttara Kannada",e:"🪨",t:"nature",tg:["Rock Formation","Trek","Nature"],ds:"Unique karst rock formations rising 100m amid lush forests.",co:700,w:4,ro:7,k:5,el:2,fa:5,du:1,bt:"Oct–Feb",tp:["Best in winter – avoid monsoon","Trek is 3km from base","Carry water"],fd:["Konkan Thali","Fish Curry","Neer Dosa"],hl:["Bhairaveshwara Shikhara","Mohini Shikhara","Forest trek","Cave temples"],md:"Sirsi Government Hospital",tr:"8 hrs from Bengaluru"},
-{id:23,n:"Kudremukh",c:"Chikmagalur",e:"🏞️",t:"nature",tg:["Trek","National Park","Peaks"],ds:"Horse-face peak in biodiverse Shola forests – pristine trekking.",co:1500,w:5,ro:7,k:3,el:2,fa:4,du:2,bt:"Sep–Jan",tp:["Trek permit – limited daily slots","14km return – start by 6 AM","Leeches in monsoon"],fd:["Malnad Chicken Curry","Akki Roti","Bamboo Shoot"],hl:["Kudremukh peak trek","Shola forests","Kadambi Falls","Kalasa village"],md:"Mudigere Hospital (35km)",tr:"6 hrs from Bengaluru"},
-{id:24,n:"Tungabhadra Dam",c:"Ballari",e:"💦",t:"nature",tg:["Dam","River","History"],ds:"Massive dam near Hampi with boat rides and reservoir views.",co:800,w:1,ro:6,k:7,el:8,fa:8,du:1,bt:"Oct–Feb",tp:["Sound & light show is excellent","Combine with Hampi","Gardens are free"],fd:["Bisi Bele Bath","Ragi Mudde","Tungabhadra Fish"],hl:["Dam & reservoir","Boat rides","Tungabhadra Gardens","Sound & light show"],md:"VIMS Hospital (15km)",tr:"6 hrs from Bengaluru"},
-{id:25,n:"Bidar",c:"Bidar",e:"🕌",t:"heritage",tg:["Fort","Deccan","History"],ds:"Bahamani Sultanate capital with medieval fort and Bidriware craft.",co:900,w:2,ro:5,k:5,el:7,fa:6,du:2,bt:"Oct–Mar",tp:["Visit Bidriware craft clusters","Allocate 3+ hours for fort","Mahmud Gawan Madrasa is unique"],fd:["Hyderabadi Biryani","Haleem","Shirmal","Kulfi"],hl:["Bidar Fort","Bahamani Tombs","Mahmud Gawan Madrasa","Bidriware craft"],md:"Bidar District Hospital",tr:"6 hrs from Bengaluru"}
+{id:1,n:"Hampi",c:"Ballari",e:"🏛️",t:"heritage",tg:["UNESCO","Heritage","Ruins"],ds:"Ancient Vijayanagara empire capital with stunning boulder landscapes.",co:1200,w:3,ro:7,k:7,el:4,fa:8,du:6,bt:"Oct–Feb",tp:["Visit Vittala Temple early to avoid crowds","Hire a local guide for rich history","Rent a bicycle to cover the vast site"],fd:["Bisi Bele Bath","Jolada Roti","Obbattu"],hl:["Virupaksha Temple","Vittala Temple","Stone Chariot","Elephant Stables","Lotus Mahal"],md:"District Hospital Hospet (13km)",tr:"6 hrs from Bengaluru via NH50",lat:15.335,lng:76.462},
+{id:2,n:"Coorg",c:"Kodagu",e:"🌿",t:"hills",tg:["Coffee","Hills","Nature"],ds:"Scotland of India – misty coffee estates and Kodava culture.",co:2500,w:3,ro:9,k:6,el:5,fa:7,du:4,bt:"Oct–Mar",tp:["Book a coffee estate homestay","Carry warm clothes for evenings","Avoid monsoon for trekking"],fd:["Pandi Curry","Kadambuttu","Akki Roti"],hl:["Abbey Falls","Raja's Seat","Dubare Elephant Camp","Namdroling Monastery"],md:"Cauvery Hospital Madikeri (8km)",tr:"5 hrs from Bengaluru via Mysuru",lat:12.422,lng:75.739},
+{id:3,n:"Mysuru",c:"Mysuru",e:"🏰",t:"heritage",tg:["Palace","Heritage","Culture"],ds:"City of palaces – royal heritage, silk, and Dasara grandeur.",co:1500,w:2,ro:7,k:8,el:9,fa:9,du:3,bt:"Year-round",tp:["Palace lit up every Sunday evening","Visit Devaraja Market for silk","Book Brindavan Gardens in advance"],fd:["Mysore Pak","Idli Vada Sambar","Masala Dosa"],hl:["Mysore Palace","Chamundi Hills","Brindavan Gardens","St. Philomena's Church","Mysore Zoo"],md:"JSS Hospital (3km)",tr:"3 hrs from Bengaluru via Expressway",lat:12.295,lng:76.644},
+{id:4,n:"Gokarna",c:"Uttara Kannada",e:"🏖️",t:"beach",tg:["Beach","Temple","Sunset"],ds:"Sacred beach town with pristine coastline and Om Beach sunsets.",co:1800,w:3,ro:9,k:7,el:4,fa:7,du:3,bt:"Oct–Mar",tp:["Kudle Beach is quieter than Om","Trek to Paradise Beach at low tide","Carry cash – ATMs are limited"],fd:["Seafood Thali","Neer Dosa","Coconut Prawn Curry"],hl:["Om Beach","Kudle Beach","Mahabaleshwara Temple","Paradise Beach","Sunset viewpoint"],md:"Gokarna PHC",tr:"8 hrs from Bengaluru via NH66",lat:14.548,lng:74.317},
+{id:5,n:"Bandipur",c:"Chamarajanagar",e:"🐘",t:"wildlife",tg:["Safari","Wildlife","Tiger Reserve"],ds:"Top tiger reserve and elephant corridor in the Nilgiri Biosphere.",co:2000,w:1,ro:6,k:9,el:7,fa:10,du:2,bt:"Mar–May, Oct–Nov",tp:["Book safari slots online in advance","Morning safaris (6–9 AM) are best","Stay within resort – no night movement"],fd:["Karnataka Thali","Ragi Mudde","Sambar Rice"],hl:["Jeep safari","Elephant herds","Bird watching","Tiger Reserve"],md:"NIMHANS Mysuru (80km)",tr:"4 hrs from Bengaluru",lat:11.671,lng:76.634},
+{id:6,n:"Chikmagalur",c:"Chikmagalur",e:"⛰️",t:"hills",tg:["Coffee","Trekking","Hills"],ds:"First coffee-grown land with Mullayanagiri, Karnataka's highest peak.",co:2200,w:4,ro:8,k:5,el:4,fa:6,du:3,bt:"Sep–Mar",tp:["Mullayanagiri trek best at sunrise","Coffee estate tours included with stay","Baba Budangiri has restricted night access"],fd:["Filter Coffee","Kesari Bath","Akki Roti"],hl:["Mullayanagiri peak","Baba Budangiri","Coffee estate trek","Hebbe Falls"],md:"Chikmagalur District Hospital",tr:"5 hrs from Bengaluru",lat:13.318,lng:75.777},
+{id:7,n:"Belur & Halebidu",c:"Hassan",e:"🗿",t:"temple",tg:["Hoysala","Temple","Architecture"],ds:"12th century Hoysala temples – India's finest stone sculptures.",co:800,w:2,ro:6,k:6,el:8,fa:7,du:3,bt:"Oct–Feb",tp:["Hire ASI guide for ₹200","Photography allowed without flash","Combine both in one day"],fd:["Obbattu","Bisi Bele Bath","Mysore Pak"],hl:["Chennakeshava Temple","Hoysaleswara Temple","Kedareshwara Temple","Sculpture museum"],md:"Hassan Government Hospital",tr:"4 hrs from Bengaluru",lat:13.165,lng:75.904},
+{id:8,n:"Murudeshwar",c:"Uttara Kannada",e:"🙏",t:"temple",tg:["Temple","Sea","Shiva Statue"],ds:"Towering 20-storey Shiva statue by the Arabian Sea.",co:1400,w:2,ro:7,k:7,el:6,fa:8,du:2,bt:"Oct–Mar",tp:["Take Raja Gopura lift for sea views","Scuba diving at Netrani Island","Temple darshan is free"],fd:["Mangalorean Fish Curry","Neer Dosa","Kundapur Chicken"],hl:["Murudeshwara Temple","20-storey Shiva statue","Netrani Island diving","Sea beach"],md:"Bhatkal CHC (18km)",tr:"7 hrs from Bengaluru",lat:14.094,lng:74.486},
+{id:9,n:"Jog Falls",c:"Shivamogga",e:"💧",t:"nature",tg:["Waterfall","Nature","Monsoon"],ds:"India's second highest plunge waterfall – best in monsoon.",co:900,w:3,ro:8,k:8,el:5,fa:9,du:2,bt:"Jul–Oct",tp:["Jul–Sep for max water flow","Descent to base is steep – wear sturdy shoes","Free government viewpoint"],fd:["Ragi Mudde","Akki Roti","Jolada Roti"],hl:["Raja Falls","Rani Falls","Rover Falls","Roarer Falls"],md:"Sagar Hospital (30km)",tr:"5 hrs from Bengaluru",lat:14.228,lng:74.796},
+{id:10,n:"Dandeli",c:"Uttara Kannada",e:"🛶",t:"wildlife",tg:["Rafting","Wildlife","Adventure"],ds:"Adventure capital with river rafting and Kali Tiger Reserve.",co:2500,w:3,ro:6,k:7,el:3,fa:7,du:2,bt:"Oct–May",tp:["Book rafting in advance","Carry dry bags","Night jungle drives with permits"],fd:["Bamboo Chicken","Malvani Crab","Forest Thali"],hl:["White water rafting","Kuleni Forest","Bird watching","Kayaking"],md:"Dandeli Government Hospital",tr:"9 hrs from Bengaluru",lat:15.267,lng:74.617},
+{id:11,n:"Badami",c:"Bagalkote",e:"🏔️",t:"heritage",tg:["Cave Temples","Chalukya","Heritage"],ds:"6th century Chalukyan cave temples in red sandstone cliffs.",co:1000,w:3,ro:6,k:6,el:5,fa:7,du:3,bt:"Oct–Mar",tp:["All 4 caves in 3–4 hours","Wear covered footwear","Cave 3 has best carvings"],fd:["Jowar Roti","North Karnataka Thali","Shenga Holige"],hl:["Cave Temple 1-4","Bhutanatha Temple","Agastya Lake","Archaeological Museum"],md:"Badami Government Hospital",tr:"6 hrs from Bengaluru",lat:15.914,lng:75.679},
+{id:12,n:"Kabini",c:"Mysuru",e:"🌊",t:"wildlife",tg:["Safari","Backwaters","Wildlife"],ds:"Pristine backwaters and finest wildlife spot in Nagarhole.",co:3500,w:1,ro:9,k:8,el:7,fa:9,du:2,bt:"Jun–Oct",tp:["Boat safari is more scenic than jeep","Book Jungle Lodges months ahead","Elephant herds in summer"],fd:["Forest Thali","Ragi Mudde","Bamboo Biryani"],hl:["Backwater boat safari","Kabini Dam","Elephant herds","Tiger spotting"],md:"H.D. Kote Hospital (18km)",tr:"4.5 hrs from Bengaluru",lat:11.938,lng:76.381},
+{id:13,n:"Udupi",c:"Udupi",e:"🍜",t:"temple",tg:["Temple","Food","Culture"],ds:"Birthplace of Udupi cuisine, home of the Krishna Temple.",co:1200,w:2,ro:5,k:8,el:9,fa:9,du:2,bt:"Oct–Mar",tp:["Temple prasad is free & delicious","Malpe Beach is 5km away","Paryaya festival is spectacular"],fd:["Udupi Thali","Neer Dosa","Kane Fish Fry","Kodbale"],hl:["Sri Krishna Temple","Malpe Beach","St. Mary's Islands","Anantheshwara Temple"],md:"KMC Manipal (8km)",tr:"5.5 hrs from Bengaluru",lat:13.342,lng:74.745},
+{id:14,n:"Sakleshpur",c:"Hassan",e:"🚂",t:"hills",tg:["Coffee","Railway","Trekking"],ds:"Lush coffee trail and heritage railway trek through Ghats.",co:1800,w:4,ro:8,k:5,el:4,fa:6,du:2,bt:"Sep–Feb",tp:["Railway trek needs Forest permit","Carry rain gear","Farm-to-cup coffee stays"],fd:["Filter Coffee","Akki Roti","Pandi Curry"],hl:["Heritage railway trek","Coffee estate tours","Manjarabad Fort","Bisle Ghat"],md:"Sakleshpur Government Hospital",tr:"4.5 hrs from Bengaluru",lat:12.951,lng:75.787},
+{id:15,n:"Nandi Hills",c:"Chikkaballapura",e:"🌄",t:"hills",tg:["Sunrise","Hills","Cycling"],ds:"Tipu Sultan's summer retreat – legendary sunrise and paragliding.",co:900,w:2,ro:8,k:7,el:6,fa:8,du:1,bt:"Sep–Feb",tp:["Arrive before 5:30 AM for sunrise","Paragliding Oct–Feb with booking","Bhoga Nandeeshwara at base is overlooked"],fd:["Corn on the cob","Kaveri Restaurant breakfast","Filter coffee"],hl:["Sunrise viewpoint","Tipu's Drop","Bhoga Nandeeshwara Temple","Paragliding zone"],md:"Chikkaballapura Hospital (20km)",tr:"1.5 hrs from Bengaluru",lat:13.372,lng:77.682},
+{id:16,n:"Nagarhole",c:"Mysuru",e:"🐯",t:"wildlife",tg:["Tiger Reserve","Safari","Nature"],ds:"Rajiv Gandhi National Park – tigers and Asian elephants corridor.",co:2000,w:1,ro:7,k:9,el:7,fa:10,du:2,bt:"Oct–May",tp:["Morning safari slots are gold","Kabini river edge is wildlife hotspot","Book permit on KFD website"],fd:["Karnataka Thali","Ragi Mudde","Local Honey"],hl:["Jeep safari","River edge wildlife","Nagarhole river cruise","Tribal village walk"],md:"H.D. Kote Hospital (25km)",tr:"4.5 hrs from Bengaluru",lat:12.02,lng:76.109},
+{id:17,n:"St. Mary's Islands",c:"Udupi",e:"🏝️",t:"beach",tg:["Island","Beach","Basalt Rocks"],ds:"Unique hexagonal basalt rock formations on a pristine island.",co:1200,w:2,ro:9,k:8,el:5,fa:8,du:1,bt:"Oct–Apr",tp:["Boat from Malpe Beach (first 9 AM)","Island closes at 5 PM","No food stalls – carry snacks"],fd:["Coconut Water","Malpe Seafood","Sol Kadhi"],hl:["Basalt formations","Coconut Island","Snorkeling","Lighthouse view"],md:"KMC Manipal (10km)",tr:"5.5 hrs from Bengaluru",lat:13.374,lng:74.678},
+{id:18,n:"Shravanabelagola",c:"Hassan",e:"🗿",t:"temple",tg:["Jain","Gommateshwara","Pilgrimage"],ds:"Tallest monolithic statue – 58ft Gommateshwara from single rock.",co:600,w:3,ro:4,k:5,el:4,fa:6,du:1,bt:"Oct–Mar",tp:["700 steps – sturdy footwear essential","Visit early before heat","Mahamastakabhisheka every 12 years"],fd:["Dharwad Pedha","Mysore Pak","North Karnataka Thali"],hl:["Gommateshwara statue","Chandragiri Hill","Jain pilgrimage complex","Top view"],md:"Hassan Hospital (50km)",tr:"3 hrs from Bengaluru",lat:12.858,lng:76.49},
+{id:19,n:"Chitradurga Fort",c:"Chitradurga",e:"🏯",t:"heritage",tg:["Fort","History","Architecture"],ds:"Impregnable fortress with 7 concentric walls and 19 temples.",co:700,w:3,ro:5,k:7,el:5,fa:8,du:2,bt:"Oct–Feb",tp:["Entry ₹25 for Indians","Wear comfortable shoes","Obavva's passage is most popular"],fd:["Jowar Roti","Ragi Mudde","Chitradurga Mixture"],hl:["Fort ramparts","Hidimbeshwara Temple","Obavva's passage","Hill views"],md:"Chitradurga Hospital (3km)",tr:"3.5 hrs from Bengaluru",lat:14.23,lng:76.399},
+{id:20,n:"Agumbe",c:"Shivamogga",e:"🌧️",t:"nature",tg:["Rainforest","Sunset","Biodiversity"],ds:"Cherrapunji of the South – rainforest and king cobra territory.",co:1000,w:3,ro:8,k:6,el:4,fa:6,du:2,bt:"Jun–Oct, Dec–Jan",tp:["Best in monsoon – carry waterproofs","ARRS guided tours","Night walks with booking"],fd:["Malnad Cuisine","Neer Dosa","Jackfruit Dishes"],hl:["Sunset Point","Barkana Falls","Rainforest trails","Onake Abbi Falls"],md:"Thirthahalli Hospital (35km)",tr:"5 hrs from Bengaluru",lat:13.506,lng:75.099},
+{id:21,n:"Pattadakal",c:"Bagalkote",e:"🏛️",t:"heritage",tg:["UNESCO","Chalukya","Temples"],ds:"UNESCO site with 8th century Chalukyan temples.",co:800,w:2,ro:5,k:6,el:7,fa:7,du:2,bt:"Oct–Feb",tp:["Combine with Badami & Aihole","ASI guide for ₹250","Entry ₹40 Indians"],fd:["North Karnataka Thali","Shenga Holige","Jowar Chapathi"],hl:["Virupaksha Temple","Mallikarjuna Temple","Sangameshwara Temple","Sculpture museum"],md:"Bagalkote Hospital (30km)",tr:"7 hrs from Bengaluru",lat:15.948,lng:75.818},
+{id:22,n:"Yana",c:"Uttara Kannada",e:"🪨",t:"nature",tg:["Rock Formation","Trek","Nature"],ds:"Unique karst rock formations rising 100m amid lush forests.",co:700,w:4,ro:7,k:5,el:2,fa:5,du:1,bt:"Oct–Feb",tp:["Best in winter – avoid monsoon","Trek is 3km from base","Carry water"],fd:["Konkan Thali","Fish Curry","Neer Dosa"],hl:["Bhairaveshwara Shikhara","Mohini Shikhara","Forest trek","Cave temples"],md:"Sirsi Government Hospital",tr:"8 hrs from Bengaluru",lat:14.693,lng:74.572},
+{id:23,n:"Kudremukh",c:"Chikmagalur",e:"🏞️",t:"nature",tg:["Trek","National Park","Peaks"],ds:"Horse-face peak in biodiverse Shola forests – pristine trekking.",co:1500,w:5,ro:7,k:3,el:2,fa:4,du:2,bt:"Sep–Jan",tp:["Trek permit – limited daily slots","14km return – start by 6 AM","Leeches in monsoon"],fd:["Malnad Chicken Curry","Akki Roti","Bamboo Shoot"],hl:["Kudremukh peak trek","Shola forests","Kadambi Falls","Kalasa village"],md:"Mudigere Hospital (35km)",tr:"6 hrs from Bengaluru",lat:13.171,lng:75.242},
+{id:24,n:"Tungabhadra Dam",c:"Ballari",e:"💦",t:"nature",tg:["Dam","River","History"],ds:"Massive dam near Hampi with boat rides and reservoir views.",co:800,w:1,ro:6,k:7,el:8,fa:8,du:1,bt:"Oct–Feb",tp:["Sound & light show is excellent","Combine with Hampi","Gardens are free"],fd:["Bisi Bele Bath","Ragi Mudde","Tungabhadra Fish"],hl:["Dam & reservoir","Boat rides","Tungabhadra Gardens","Sound & light show"],md:"VIMS Hospital (15km)",tr:"6 hrs from Bengaluru",lat:15.268,lng:76.334},
+{id:25,n:"Bidar",c:"Bidar",e:"🕌",t:"heritage",tg:["Fort","Deccan","History"],ds:"Bahamani Sultanate capital with medieval fort and Bidriware craft.",co:900,w:2,ro:5,k:5,el:7,fa:6,du:2,bt:"Oct–Mar",tp:["Visit Bidriware craft clusters","Allocate 3+ hours for fort","Mahmud Gawan Madrasa is unique"],fd:["Hyderabadi Biryani","Haleem","Shirmal","Kulfi"],hl:["Bidar Fort","Bahamani Tombs","Mahmud Gawan Madrasa","Bidriware craft"],md:"Bidar District Hospital",tr:"6 hrs from Bengaluru",lat:17.912,lng:77.52}
 ];
 
 const HOTELS={
@@ -574,7 +566,7 @@ solo:{key:"ro",spd:{relaxed:2,moderate:4,packed:5},desc:"🧍 Solo mode: flexibl
 const TIMES=["6:00 AM","8:30 AM","11:00 AM","12:30 PM","2:30 PM","4:30 PM","6:30 PM"];
 const WX=[["☀️","26°C"],["☀️","28°C"],["🌤️","32°C"],["🌤️","34°C"],["⛅","35°C"],["🌧️","28°C"],["🌧️","26°C"],["🌧️","26°C"],["⛅","28°C"],["🌤️","28°C"],["☀️","26°C"],["☀️","24°C"]];
 
-let ST={screen:"explore",filter:"all",search:"",traveler:"couple",mode:"car",budget:15000,days:3,people:2,city:"Bengaluru",pace:"relaxed",interests:[],plan:null,trips:0,totalDays:0,saved:[],recent:[],iTab:"overview",prevScreen:"explore",startDate:""};
+let ST={screen:"explore",filter:"all",search:"",traveler:"couple",mode:"car",budget:15000,days:3,people:2,city:"Bengaluru",pace:"relaxed",interests:[],plan:null,trips:0,totalDays:0,saved:[],recent:[],iTab:"overview"};
 let currentUser=null;
 
 window.initAuth=function(){
@@ -612,9 +604,6 @@ function showApp(){
   document.getElementById('user-name').textContent=currentUser.name;
   document.getElementById('user-email').textContent=currentUser.email;
   document.getElementById('user-avatar').textContent=(currentUser.name||'U').charAt(0).toUpperCase();
-  const today=new Date().toISOString().split('T')[0];
-  const sd=document.getElementById('p-start-date');
-  if(sd&&!sd.value){sd.value=today;sd.min=today;updateEndDate();}
   renderPlaces();
   updateProfilePrefs();
   updateProfileSaved();
@@ -751,6 +740,140 @@ async function saveUserData(){
   }
 }
 
+
+// Date helpers
+window.updateEndDate=function(){
+  const startEl=document.getElementById('p-start');
+  const endEl=document.getElementById('p-end');
+  const daysEl=document.getElementById('p-days');
+  if(!startEl||!endEl||!daysEl)return;
+  const start=startEl.value;
+  const days=parseInt(daysEl.value)||1;
+  if(!start){endEl.value='';return;}
+  const d=new Date(start);
+  d.setDate(d.getDate()+days-1);
+  endEl.value=d.toISOString().split('T')[0];
+};
+
+// Set today as default start date on load
+(function(){
+  const el=document.getElementById('p-start');
+  if(el&&!el.value){
+    const today=new Date();
+    el.value=today.toISOString().split('T')[0];
+    window.updateEndDate&&window.updateEndDate();
+  }
+})();
+
+// Distance between two lat/lng points in km (Haversine)
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// Starting city coords
+const CITY_COORDS={
+  'Bengaluru':{lat:12.971,lng:77.594},
+  'Mysuru':{lat:12.295,lng:76.644},
+  'Mangaluru':{lat:12.914,lng:74.856},
+  'Hubli':{lat:15.360,lng:75.124},
+  'Belagavi':{lat:15.849,lng:74.497}
+};
+
+// Max km between consecutive stops in a single day
+const MAX_DAY_RADIUS_KM=180;
+
+// Distance-aware greedy clustering:
+// Score places, then build days where each place is within MAX_DAY_RADIUS_KM
+// of at least one already-selected place for that day (or is the first stop).
+function buildDistanceAwareDays(scored,days,spd,startCity){
+  const cityCoord=CITY_COORDS[startCity]||CITY_COORDS['Bengaluru'];
+  const used=new Set();
+  const itinDays=[];
+
+  for(let d=0;d<days;d++){
+    const spots=[];
+    // For first day, anchor is starting city. After that, anchor is last spot of previous day.
+    let anchorLat=d===0?cityCoord.lat:itinDays[d-1].spots[itinDays[d-1].spots.length-1].lat;
+    let anchorLng=d===0?cityCoord.lng:itinDays[d-1].spots[itinDays[d-1].spots.length-1].lng;
+
+    for(let p of scored){
+      if(spots.length>=spd)break;
+      if(used.has(p.id))continue;
+      const distFromAnchor=haversine(anchorLat,anchorLng,p.lat,p.lng);
+      // First stop: must be within reasonable reach (300km) from anchor
+      // Subsequent stops: within MAX_DAY_RADIUS_KM from last selected stop
+      const lastSpot=spots[spots.length-1];
+      const distFromLast=lastSpot?haversine(lastSpot.lat,lastSpot.lng,p.lat,p.lng):distFromAnchor;
+      const limit=spots.length===0?300:MAX_DAY_RADIUS_KM;
+      const checkDist=spots.length===0?distFromAnchor:distFromLast;
+      if(checkDist<=limit){
+        spots.push(p);
+        used.add(p.id);
+        // Update anchor to this spot
+        anchorLat=p.lat;anchorLng=p.lng;
+      }
+    }
+    // If no spots found within distance, relax and take best scored unused
+    if(!spots.length){
+      for(let p of scored){
+        if(!used.has(p.id)){spots.push(p);used.add(p.id);break;}
+      }
+    }
+    if(!spots.length)break;
+    itinDays.push({spots});
+  }
+  return itinDays;
+}
+
+// Add a single place from Explore directly to itinerary
+window.addToItinerary=function(id){
+  const p=PL.find(x=>x.id===id);if(!p)return;
+  if(!ST.plan){
+    // No plan yet — create a minimal 1-day plan with this place
+    const dayCost=Math.round(p.co*0.8);
+    const stops=[{time:'9:00 AM',name:p.n,note:p.ds.substring(0,55)+'...',e:p.e,id:p.id}];
+    ST.plan={
+      days:[{d:1,spots:[p],stops,fatigue:'Low',fatigueN:20,dayCost,date:''}],
+      total:dayCost,budget:dayCost*2,people:1,daysN:1,
+      city:'Bengaluru',type:'couple',pace:'relaxed',mode:'car',
+      wx:[['☀️','28°C']],startDate:'',endDate:''
+    };
+    document.getElementById('i-empty').style.display='none';
+    document.getElementById('i-content').style.display='block';
+    document.getElementById('i-sub').textContent='Custom plan';
+    document.querySelectorAll('.TB').forEach(x=>x.classList.remove('on'));
+    document.querySelector('.TB').classList.add('on');
+    ST.iTab='overview';
+  } else {
+    // Plan exists — check not already added
+    const allIds=ST.plan.days.flatMap(d=>d.spots.map(s=>s.id));
+    if(allIds.includes(id)){
+      alert(p.n+' is already in your itinerary!');return;
+    }
+    // Add to last day
+    const lastDay=ST.plan.days[ST.plan.days.length-1];
+    const timeSlots=['6:00 AM','8:30 AM','11:00 AM','12:30 PM','2:30 PM','4:30 PM','6:30 PM'];
+    const t=timeSlots[Math.min(lastDay.stops.filter(s=>!s.isBreak).length,timeSlots.length-1)];
+    lastDay.spots.push(p);
+    lastDay.stops.push({time:t,name:p.n,note:p.ds.substring(0,55)+'...',e:p.e,id:p.id});
+    const avgW=lastDay.spots.reduce((s,sp)=>s+sp.w,0)/lastDay.spots.length;
+    lastDay.fatigue=avgW<=2?'Low':avgW<=3.5?'Medium':'High';
+    lastDay.fatigueN=Math.round((avgW/5)*100);
+    lastDay.dayCost+=Math.round(p.co*0.2);
+    ST.plan.total+=Math.round(p.co*0.2*ST.plan.people);
+  }
+  renderItinTab();saveUserData();
+  // Show success toast
+  const toast=document.createElement('div');
+  toast.textContent='✅ '+p.n+' added to itinerary!';
+  toast.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#2A7E6E;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;font-family:inherit;white-space:nowrap';
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),2500);
+  nav('itinerary');
+};
+
 window.nav=function(s){
   document.querySelectorAll('.SCR').forEach(x=>x.classList.remove('on'));
   document.querySelectorAll('.NI').forEach(x=>x.classList.remove('on'));
@@ -760,28 +883,6 @@ window.nav=function(s){
   ST.screen=s;
   window.scrollTo(0,0);
 };
-
-window.goBack=function(){nav(ST.prevScreen||'explore');};
-
-window.updateEndDate=function(){
-  const sd=document.getElementById('p-start-date').value;
-  const days=Math.min(Math.max(parseInt(document.getElementById('p-days').value)||3,1),10);
-  if(sd){
-    const end=new Date(sd+'T00:00:00');
-    end.setDate(end.getDate()+days-1);
-    document.getElementById('p-end-date').value=end.toISOString().split('T')[0];
-  }
-};
-
-function fmtDate(s){
-  if(!s)return '';
-  const d=new Date(s+'T00:00:00');
-  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-}
-function addDays(s,n){
-  const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);
-  return d.toISOString().split('T')[0];
-}
 
 window.setFilter=function(f,el){
   document.querySelectorAll('.FROW .CHIP').forEach(x=>x.classList.remove('on'));
@@ -861,7 +962,6 @@ window.toggleSave=function(id,el){
 
 window.showDetail=function(id){
   const p=PL.find(x=>x.id===id);if(!p)return;
-  ST.prevScreen=ST.screen;
   if(!ST.recent.includes(id)){ST.recent.unshift(id);if(ST.recent.length>5)ST.recent.pop();updateProfileRecent();saveUserData();}
   const fc=p.w<=2?'var(--tl)':p.w<=3?'var(--am)':'var(--rd)';
   const fl=p.w<=2?'Easy walk':p.w<=3?'Moderate':'Strenuous';
@@ -898,7 +998,10 @@ window.showDetail=function(id){
       <div style="font-size:12px;color:var(--tx);padding:4px 0;display:flex;gap:6px"><span>🚌</span><span>${p.tr}</span></div>
       <div style="font-size:12px;color:var(--mx);padding:4px 0;display:flex;gap:6px"><span>🏥</span><span>${p.md}</span></div>
     </div>
-    <div style="padding:6px 12px 20px"><button class="BTNP" onclick="nav('plan')">Add to trip plan →</button></div>
+    <div style="padding:6px 12px 20px;display:flex;gap:8px">
+      <button class="BTNP" style="flex:1" onclick="addToItinerary(${p.id})">+ Add to itinerary</button>
+      <button class="BTNS" style="flex:1" onclick="nav('plan')">Plan trip →</button>
+    </div>
   `;
   nav('detail');
 };
@@ -908,10 +1011,12 @@ window.generatePlan=function(){
   const days=Math.min(Math.max(parseInt(document.getElementById('p-days').value)||3,1),10);
   const people=Math.max(parseInt(document.getElementById('p-people').value)||2,1);
   const city=document.getElementById('p-city').value;
-  const startDate=document.getElementById('p-start-date').value;
-  ST.budget=budget;ST.days=days;ST.people=people;ST.city=city;ST.startDate=startDate;
+  const startDate=document.getElementById('p-start')?document.getElementById('p-start').value:'';
+  const endDate=document.getElementById('p-end')?document.getElementById('p-end').value:'';
+  ST.budget=budget;ST.days=days;ST.people=people;ST.city=city;
   const cfg=TC[ST.traveler];
   const spd=cfg.spd[ST.pace];
+  // Score all places
   const scored=PL.map(p=>{
     let s=p[cfg.key]||5;
     if(cfg.walkCap&&p.w>cfg.walkCap)s-=4;
@@ -922,42 +1027,60 @@ window.generatePlan=function(){
     });
     return{...p,score:s};
   }).sort((a,b)=>b.score-a.score);
-  const used=new Set();const itinDays=[];
-  for(let d=0;d<days;d++){
-    const spots=[];
-    for(let p of scored){if(spots.length>=spd)break;if(!used.has(p.id)){spots.push(p);used.add(p.id);}}
-    if(!spots.length)break;
+
+  // Build days using distance-aware clustering
+  const clustered=buildDistanceAwareDays(scored,days,spd,city);
+
+  // Build full day objects with stops, fatigue, cost, dates
+  const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const itinDays=clustered.map((cl,idx)=>{
+    const spots=cl.spots;
     const stops=[];
+    // Calculate date label
+    let dateLabel='';
+    if(startDate){
+      const sd=new Date(startDate);
+      sd.setDate(sd.getDate()+idx);
+      dateLabel=sd.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+    }
     spots.forEach((pl,i)=>{
-      stops.push({time:TIMES[Math.min(i*2,TIMES.length-1)],name:pl.n,note:pl.ds.substring(0,55)+'...',e:pl.e,id:pl.id});
+      const timeSlots=['8:00 AM','10:30 AM','12:30 PM','2:30 PM','4:30 PM','6:00 PM'];
+      stops.push({time:timeSlots[Math.min(i,timeSlots.length-1)],name:pl.n,note:pl.ds.substring(0,55)+'...',e:pl.e,id:pl.id});
       if((ST.traveler==='kids'||ST.traveler==='elders')&&i<spots.length-1){
-        stops.push({time:TIMES[Math.min(i*2+1,TIMES.length-1)],name:ST.traveler==='kids'?'Snack & rest':'Rest & refresh',note:'Break stop',e:'⏸️',isBreak:true});
+        stops.push({time:timeSlots[Math.min(i,timeSlots.length-2)]+' (break)',name:ST.traveler==='kids'?'Snack & rest':'Rest & refresh',note:'Break stop',e:'⏸️',isBreak:true});
       }
     });
+    // Compute travel distance for day
+    let travelKm=0;
+    for(let i=1;i<spots.length;i++){
+      travelKm+=haversine(spots[i-1].lat,spots[i-1].lng,spots[i].lat,spots[i].lng);
+    }
     const avgW=spots.reduce((s,p)=>s+p.w,0)/spots.length;
     const fatigue=avgW<=2?'Low':avgW<=3.5?'Medium':'High';
     const fatigueN=Math.round((avgW/5)*100);
     const dayCost=Math.round((budget/people/days)*0.85+spots.reduce((s,p)=>s+Math.round(p.co*0.15),0));
-    itinDays.push({d:d+1,spots,stops,fatigue,fatigueN,dayCost});
-  }
+    return{d:idx+1,spots,stops,fatigue,fatigueN,dayCost,dateLabel,travelKm:Math.round(travelKm)};
+  });
+
   const total=Math.round(itinDays.reduce((s,d)=>s+d.dayCost,0)*people);
-  const mn=new Date().getMonth();
+  const mn=startDate?new Date(startDate).getMonth():new Date().getMonth();
   const wx=Array.from({length:days},(_,i)=>WX[(mn+Math.floor(i/30))%12]);
-  ST.plan={days:itinDays,total,budget,people,daysN:days,city,type:ST.traveler,pace:ST.pace,mode:ST.mode,wx,startDate};
+  ST.plan={days:itinDays,total,budget,people,daysN:days,city,type:ST.traveler,pace:ST.pace,mode:ST.mode,wx,startDate,endDate};
   ST.trips++;ST.totalDays+=days;
   document.getElementById('pr-trips').textContent=ST.trips;
   document.getElementById('pr-days').textContent=ST.totalDays;
   updateProfilePrefs();saveUserData();
   document.getElementById('i-empty').style.display='none';
   document.getElementById('i-content').style.display='block';
-  const dateRange=startDate?fmtDate(startDate)+' – '+fmtDate(addDays(startDate,days-1))+' · ':'';
-  document.getElementById('i-sub').textContent=dateRange+days+' days · '+people+' people · ₹'+budget.toLocaleString('en-IN');
+  const sub=days+' days · '+people+' people · ₹'+budget.toLocaleString('en-IN');
+  document.getElementById('i-sub').textContent=startDate?sub+' · '+startDate+' → '+endDate:sub;
   document.querySelectorAll('.TB').forEach(x=>x.classList.remove('on'));
   document.querySelector('.TB').classList.add('on');
   ST.iTab='overview';
   renderItinTab();
   nav('itinerary');
 };
+
 
 function renderItinTab(){
   const plan=ST.plan;if(!plan)return;
@@ -993,12 +1116,10 @@ function renderItinTab(){
     `;
   }
   if(tab==='days'){
-    el.innerHTML=plan.days.map(d=>{
-      const dayLabel=plan.startDate?` · ${fmtDate(addDays(plan.startDate,d.d-1))}`:'';
-      return `
+    el.innerHTML=plan.days.map(d=>`
       <div class="DDB">
         <div class="DDH">
-          <div class="DDT">Day ${d.d}${dayLabel} — ${d.spots.map(s=>s.n).join(' · ')}</div>
+          <div class="DDT">Day ${d.d}${d.dateLabel?" ("+d.dateLabel+")":""} — ${d.spots.map(s=>s.n).join(' · ')}</div><div style="font-size:10px;color:var(--mx);margin-top:2px">🚗 ~${d.travelKm||0} km travel</div>
           <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
             <span style="font-size:10px;padding:2px 7px;border-radius:100px;background:${d.fatigue==='Low'?'var(--tl-l)':d.fatigue==='Medium'?'var(--am-l)':'var(--rd-l)'};color:${d.fatigue==='Low'?'#085041':d.fatigue==='Medium'?'#633806':'var(--rd)'};font-weight:700">${d.fatigue}</span>
             <div class="DDC">₹${d.dayCost.toLocaleString('en-IN')}</div>
@@ -1014,8 +1135,7 @@ function renderItinTab(){
             ${!s.isBreak?`<button onclick="showDetail(${s.id})" style="font-size:10px;color:var(--or);background:var(--or-l);border:none;padding:4px 9px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit">Info</button>`:''}
           </div>`).join('')}
         </div>
-      </div>`;
-    }).join('');
+      </div>`).join('');
   }
   if(tab==='budget'){
     const pp=Math.round(plan.total/plan.people),pd=Math.round(pp/plan.daysN),rem=plan.budget-plan.total;
@@ -1108,71 +1228,5 @@ function updateProfileRecent(){
 }
 </script>
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('SW registered:', reg.scope))
-      .catch(err => console.log('SW registration failed:', err));
-  });
-}
-
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  setTimeout(() => {
-    if (deferredPrompt) showInstallBanner();
-  }, 3000);
-});
-
-function showInstallBanner() {
-  if (document.getElementById('install-banner')) return;
-  const banner = document.createElement('div');
-  banner.id = 'install-banner';
-  banner.style.cssText = `
-    position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
-    background:#E8692A;color:#fff;padding:12px 20px;
-    border-radius:12px;font-size:13px;font-weight:600;
-    font-family:'Plus Jakarta Sans',sans-serif;
-    display:flex;align-items:center;gap:10px;
-    box-shadow:0 4px 20px rgba(232,105,42,0.4);
-    z-index:9999;cursor:pointer;white-space:nowrap;
-  `;
-  banner.innerHTML = `
-    <span>📲</span>
-    <span>Install Roamly as an app</span>
-    <button onclick="installApp()" style="background:white;color:#E8692A;border:none;
-      padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;
-      font-family:inherit;font-size:12px">Install</button>
-    <button onclick="document.getElementById('install-banner').remove()"
-      style="background:none;border:none;color:rgba(255,255,255,0.8);
-      cursor:pointer;font-size:18px;padding:0 4px">✕</button>
-  `;
-  document.body.appendChild(banner);
-}
-
-async function installApp() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  const banner = document.getElementById('install-banner');
-  if (banner) banner.remove();
-}
-
-window.addEventListener('appinstalled', () => {
-  const banner = document.getElementById('install-banner');
-  if (banner) banner.remove();
-  deferredPrompt = null;
-});
-</script>
-
-<style>
-@keyframes slideUp {
-  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
-  to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
-}
-</style>
 </body>
 </html>

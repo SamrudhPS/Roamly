@@ -1,7 +1,7 @@
 // Karnataka Trip Planner - Service Worker
 // Caches the app shell so it loads instantly and works offline
 
-const CACHE_NAME = 'karnataka-trip-planner-v1';
+const CACHE_NAME = 'karnataka-trip-planner-v2';
 const ASSETS_TO_CACHE = [
   '/index.html',
   '/manifest.json',
