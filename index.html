@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#E8692A">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Roamly">
+<meta name="application-name" content="Roamly">
+<link rel="apple-touch-icon" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72.png">
+<link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96.png">
+<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
+<link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72.png">
 <title>Roamly</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1093,5 +1108,71 @@ function updateProfileRecent(){
 }
 </script>
 
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(() => {
+    if (deferredPrompt) showInstallBanner();
+  }, 3000);
+});
+
+function showInstallBanner() {
+  if (document.getElementById('install-banner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.style.cssText = `
+    position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+    background:#E8692A;color:#fff;padding:12px 20px;
+    border-radius:12px;font-size:13px;font-weight:600;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    display:flex;align-items:center;gap:10px;
+    box-shadow:0 4px 20px rgba(232,105,42,0.4);
+    z-index:9999;cursor:pointer;white-space:nowrap;
+  `;
+  banner.innerHTML = `
+    <span>📲</span>
+    <span>Install Roamly as an app</span>
+    <button onclick="installApp()" style="background:white;color:#E8692A;border:none;
+      padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;
+      font-family:inherit;font-size:12px">Install</button>
+    <button onclick="document.getElementById('install-banner').remove()"
+      style="background:none;border:none;color:rgba(255,255,255,0.8);
+      cursor:pointer;font-size:18px;padding:0 4px">✕</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+async function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.remove();
+}
+
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.remove();
+  deferredPrompt = null;
+});
+</script>
+
+<style>
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+}
+</style>
 </body>
 </html>

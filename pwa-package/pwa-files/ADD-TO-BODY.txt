@@ -1,0 +1,72 @@
+<!-- ============================================================ -->
+<!-- PWA SERVICE WORKER — paste this just before </body>          -->
+<!-- ============================================================ -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+
+// Show install prompt for Android Chrome
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show a subtle install banner after 3 seconds
+  setTimeout(() => {
+    if (deferredPrompt) showInstallBanner();
+  }, 3000);
+});
+
+function showInstallBanner() {
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.style.cssText = `
+    position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+    background:#E8692A;color:#fff;padding:12px 20px;
+    border-radius:12px;font-size:13px;font-weight:600;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    display:flex;align-items:center;gap:10px;
+    box-shadow:0 4px 20px rgba(232,105,42,0.4);
+    z-index:9999;cursor:pointer;white-space:nowrap;
+    animation:slideUp 0.3s ease;
+  `;
+  banner.innerHTML = `
+    <span>📲</span>
+    <span>Install Roamly as an app</span>
+    <button onclick="installApp()" style="background:white;color:#E8692A;border:none;
+      padding:5px 12px;border-radius:8px;font-weight:700;cursor:pointer;
+      font-family:inherit;font-size:12px">Install</button>
+    <button onclick="document.getElementById('install-banner').remove()" 
+      style="background:none;border:none;color:rgba(255,255,255,0.8);
+      cursor:pointer;font-size:16px;padding:0 4px">✕</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+async function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.remove();
+}
+
+// Hide banner when app is installed
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.remove();
+  deferredPrompt = null;
+});
+</script>
+
+<style>
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+}
+</style>
